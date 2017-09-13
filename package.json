@@ -1,0 +1,75 @@
+{
+  "name": "duomi-nodejs",
+  "version": "1.0.0",
+  "engines": {
+    "node": "6.10.0"
+  },
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test":
+      "rimraf ./build && cross-env NODE_ENV=test tsc --sourceMap && cross-env NODE_ENV=test ava",
+    "format": "prettier --single-quote --list-different 'app/**/*.ts'",
+    "start":
+      "cross-env NODE_ENV=development nodemon --watch 'app/**/*.ts' --ignore 'app/**/*.spec.ts' --exec ts-node ./app/server.ts",
+    "build": "rimraf ./build && tsc -p ./ && node ./scripts/build.js && echo 'Build Done!'",
+    "build:strick":
+      "rimraf ./build && tsc app/*.ts app/**/*.ts --outDir ./build --sourceMap --allowJs --strict --noUnusedLocals --noUnusedParameters --noImplicitReturns",
+    "server": "pm2 start pm2.dev.json",
+    "stop": "pm2 delete pm2.dev.json && pm2 delete pm2-dev.json",
+    "server:node":
+      "cross-env NODE_ENV=development PORT=6088 DUOMI_RPC_PORT=9096 node ./build/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://axetroy@git.yichui.net/axetroy/duomi-nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/i18nErrorCode/node-i18nerr.git/issues"
+  },
+  "homepage": "https://github.com/i18nErrorCode/node-i18nerr.git#readme",
+  "dependencies": {
+    "@types/node": "^8.0.28",
+    "body-parser": "^1.17.2",
+    "connect-timeout": "^1.9.0",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "express": "^4.15.4",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.10.5",
+    "hbs": "^4.0.1",
+    "helmet": "^3.8.1",
+    "js-yaml": "^3.9.1",
+    "jsonwebtoken": "^8.0.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "pg": "6.4.2",
+    "pg-hstore": "^2.3.2",
+    "reflect-metadata": "^0.1.10",
+    "sequelize": "^4.8.2",
+    "uuid": "^3.1.0",
+    "validator": "^8.1.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.0.37",
+    "@types/express-graphql": "^0.0.33",
+    "@types/faker": "^4.1.1",
+    "@types/graphql": "^0.10.2",
+    "@types/js-yaml": "^3.9.1",
+    "@types/jsonwebtoken": "^7.2.3",
+    "@types/lodash": "^4.14.74",
+    "@types/sequelize": "^4.0.73",
+    "@types/uuid": "^3.4.2",
+    "@types/validator": "^6.2.3",
+    "@types/winston": "^2.3.5",
+    "ava": "^0.22.0",
+    "cross-env": "^5.0.5",
+    "glob": "^7.1.2",
+    "rimraf": "^2.6.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.2"
+  }
+}
