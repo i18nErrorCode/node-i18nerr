@@ -9,11 +9,11 @@
         "NODE_ENV": "development",
         "PORT": 3000
       },
-      "watch": true,
+      "watch": ["app"],
       "watch_options": {
         "followSymlinks": false
       },
-      "ignore_watch": ["node_modules"],
+      "ignore_watch": ["node_modules", "logs", "static", "build", "script", ".idea", ".git"],
       "autorestart": true,
       "max_memory_restart": "250M",
       "listen_timeout": 8000,
