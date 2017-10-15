@@ -31,8 +31,7 @@ export async function createUser(argv: CreateArgv$): Promise<any> {
       where: { username },
       transaction: t,
       lock: {
-        level: t.LOCK.UPDATE,
-        of: UserModel
+        level: t.LOCK.UPDATE
       }
     });
 
@@ -72,8 +71,7 @@ export async function login(argv: LoginArgv$): Promise<any> {
       where: { username, password: md5(password) },
       transaction: t,
       lock: {
-        level: t.LOCK.UPDATE,
-        of: UserModel
+        level: t.LOCK.UPDATE
       }
     });
 
@@ -108,8 +106,7 @@ export async function getUserInfo(uid: string): Promise<any> {
       where: { uid },
       transaction: t,
       lock: {
-        level: t.LOCK.UPDATE,
-        of: UserModel
+        level: t.LOCK.UPDATE
       }
     });
     const data = row.dataValues;
@@ -130,11 +127,7 @@ export async function getUserList(query): Promise<any> {
   try {
     const row: any = await UserModel.find({
       where: {},
-      transaction: t,
-      lock: {
-        level: t.LOCK.UPDATE,
-        of: UserModel
-      }
+      transaction: t
     });
     const data = row.dataValues;
     await t.commit();

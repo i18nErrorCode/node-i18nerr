@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "i18nerr",
+      "name": "node-i18n-error",
       "script": "build/server.js",
       "instances": 1,
       "exec_mode": "fork",
@@ -9,11 +9,11 @@
         "NODE_ENV": "development",
         "PORT": 3000
       },
-      "watch": ["app"],
+      "watch": ["build"],
       "watch_options": {
         "followSymlinks": false
       },
-      "ignore_watch": ["node_modules", "logs", "static", "build", "script", ".idea", ".git"],
+      "ignore_watch": ["node_modules", "logs", "static", "script", ".idea", ".git"],
       "autorestart": true,
       "max_memory_restart": "250M",
       "listen_timeout": 8000,

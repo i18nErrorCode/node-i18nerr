@@ -6,6 +6,8 @@ import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
 import { user as userMutation } from './mutations';
 import { user as userQuery } from './queries';
 
+import { verifyToken } from '../service/jwt';
+
 const args = {
   token: {
     type: GraphQLString
@@ -19,7 +21,9 @@ const args = {
  * @returns {Promise<void>}
  */
 async function extendReq(req: any, params: any) {
-  req.token = params.token || req.headers.authentication || req.cookies.Authentication || '';
+  const Authentication: string =
+    params.token || req.headers.authentication || req.cookies.Authentication || '';
+  req.token = await verifyToken(Authentication);
 }
 
 export default new GraphQLSchema({
@@ -61,7 +65,6 @@ export default new GraphQLSchema({
         }),
         args,
         async resolve(root: any, params: any, req: any) {
-          await extendReq(req, params);
           return userMutation.Public;
         }
       },

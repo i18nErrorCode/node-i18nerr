@@ -3,6 +3,7 @@
  */
 import * as _ from 'lodash';
 import * as userQuery from './user';
+import * as tableQuery from './table';
 
 interface Node$ {
   Public: any;
@@ -17,9 +18,7 @@ interface Interface$ {
 export let user: any = <Node$>{ Public: {}, Me: {} };
 export let admin: any = <Node$>{ Public: {}, Me: {} };
 
-[
-  userQuery
-].forEach((node: Interface$) => {
+[userQuery, tableQuery].forEach((node: Interface$) => {
   user = _.merge({}, user, node.user);
   admin = _.merge({}, admin, node.admin);
 });
