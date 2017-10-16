@@ -4,6 +4,7 @@
 import * as _ from 'lodash';
 import * as userMutation from './user';
 import * as tableMutation from './table';
+import * as rowMutation from './row';
 
 interface Node$ {
   Public: any;
@@ -18,7 +19,7 @@ interface Interface$ {
 export let user: any = <Node$>{ Public: {}, Me: {} };
 export let admin: any = <Node$>{ Public: {}, Me: {} };
 
-[userMutation, tableMutation].forEach((node: Interface$) => {
+[userMutation, tableMutation, rowMutation].forEach((node: Interface$) => {
   user = _.merge({}, user, node.user);
   admin = _.merge({}, admin, node.admin);
 });

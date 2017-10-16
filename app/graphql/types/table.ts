@@ -26,6 +26,10 @@ const UserFields = {
 export const TableType = new GraphQLObjectType({
   name: 'TableType',
   fields: {
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'table id'
+    },
     uid: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'uuid of creator'

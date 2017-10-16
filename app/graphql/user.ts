@@ -48,7 +48,7 @@ export default new GraphQLSchema({
         }),
         args,
         async resolve(root: any, params: any, req: any) {
-          extendReq(req, params);
+          await extendReq(req, params);
           return userQuery.Me;
         }
       }
@@ -76,7 +76,7 @@ export default new GraphQLSchema({
         }),
         args,
         async resolve(root: any, params: any, req: any) {
-          await extendReq(req, params);
+          await await extendReq(req, params);
           return userMutation.Me;
         }
       }
