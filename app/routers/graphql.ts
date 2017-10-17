@@ -25,7 +25,7 @@ interface OutputError$ {
   stack?: string[];
 }
 
-function errorFormator(err: GraphqlError$): OutputError$ {
+function errorFormattor(err: GraphqlError$): OutputError$ {
   const output: OutputError$ = {
     message: err.message,
     locations: err.locations,
@@ -75,7 +75,7 @@ export default () => {
       return {
         schema: UserSchema,
         graphiql: !isProduction,
-        formatError: errorFormator,
+        formatError: errorFormattor,
         extensions(argv: any) {
           return extensions(argv, { startTime });
         }
@@ -90,7 +90,7 @@ export default () => {
       return {
         schema: AdminSchema,
         graphiql: !isProduction,
-        formatError: errorFormator,
+        formatError: errorFormattor,
         extensions(argv: any) {
           return extensions(argv, { startTime });
         }
