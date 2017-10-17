@@ -17,17 +17,18 @@ import { generateListType } from './generate-list';
 export const RowType = new GraphQLObjectType({
   name: 'RowType',
   fields: {
+    id: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
     uid: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'uuid of creator'
+      type: new GraphQLNonNull(GraphQLString)
     },
     tid: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'table id'
     },
     key: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'row key'
+      type: new GraphQLNonNull(GraphQLString)
     },
     value_en: {
       type: new GraphQLNonNull(GraphQLString)
