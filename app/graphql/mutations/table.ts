@@ -2,8 +2,8 @@
  * Created by axetroy on 17-7-14.
  */
 
-import { GraphQLInputObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
-import { createTable } from '../../controllers/table';
+import { GraphQLBoolean, GraphQLInputObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
+import { createTable, updateTable } from '../../controllers/table';
 import { TableType } from '../types/table';
 
 const createTableEntity = {
@@ -24,25 +24,50 @@ const createTableEntity = {
   async resolve(root: any, { argv }: any, req: any) {
     const { name } = argv;
     const token = req.token;
-    console.log(token);
     return await createTable(token.uid, name);
   }
 };
 
-export const user = {
-  Public: {
-    createTable: createTableEntity
+const updateTableEntity = {
+  type: TableType,
+  description: '更新table',
+  args: {
+    argv: {
+      type: new GraphQLInputObjectType({
+        name: 'UpdateTableArgv',
+        fields: {
+          id: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          name: {
+            type: GraphQLString
+          },
+          isActive: {
+            type: GraphQLBoolean
+          }
+        }
+      })
+    }
   },
+  async resolve(root: any, { argv }: any, req: any) {
+    const { id, name, isActive } = argv;
+    const token = req.token;
+    return await updateTable({ id, uid: token.uid, name, isActive });
+  }
+};
+
+export const user = {
+  Public: {},
   Me: {
-    createTable: createTableEntity
+    createTable: createTableEntity,
+    updateTable: updateTableEntity
   }
 };
 
 export const admin = {
-  Public: {
-    createTable: createTableEntity
-  },
+  Public: {},
   Me: {
-    createTable: createTableEntity
+    createTable: createTableEntity,
+    updateTable: updateTableEntity
   }
 };

@@ -8,10 +8,10 @@ import { RFC3339NanoMaper, initQuery, sortMap } from '../utils';
 import { FormQuery$ } from '../graphql/types/formQuery';
 
 export interface UpdateTableArgv$ {
-  uid: string;
   id: string;
-  name: string;
-  isActive: boolean;
+  uid?: string;
+  name?: string;
+  isActive?: boolean;
 }
 
 /**
