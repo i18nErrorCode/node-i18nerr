@@ -50,6 +50,9 @@ export async function createUser(argv: CreateArgv$): Promise<any> {
       }
     );
     const data = row.dataValues;
+
+    data.token = generateToken(row.uid);
+
     await t.commit();
     return data;
   } catch (err) {

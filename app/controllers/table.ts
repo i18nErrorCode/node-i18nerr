@@ -4,6 +4,7 @@
 import TableModel from '../postgres/models/table.model';
 import sequelize from '../postgres/index';
 import { RFC3339NanoMaper, initQuery, sortMap } from '../utils';
+import { FormQuery$ } from '../graphql/types/formQuery';
 
 /**
  * 创建table
@@ -73,21 +74,35 @@ export async function getTable(name: string) {
  * 获取列表
  * @returns {Promise<any>}
  */
-export async function getTableList() {
-  const t: any = await sequelize.transaction();
+export async function getTableList(query: FormQuery$) {
+  let { page, limit, skip, sort, keyJson, songo } = initQuery(query);
+
   try {
-    const row: any = await TableModel.find({
-      where: {},
-      transaction: t,
-      lock: {
-        level: t.LOCK.UPDATE
+    const result: any = {};
+    const queryResult: any = await TableModel.findAndCountAll({
+      limit,
+      offset: limit * page,
+      order: sortMap(sort),
+      where: {
+        ...songo,
+        isActive: true
       }
     });
-    const data = row.dataValues;
-    await t.commit();
-    return data;
+    const rows = queryResult.rows || [];
+    const count = queryResult.count || 0;
+    const data = rows.map((row: any) => row.dataValues);
+    result.data = data;
+    result.meta = {
+      page,
+      limit,
+      skip,
+      count,
+      num: data.length,
+      sort,
+      keyJson
+    };
+    return result;
   } catch (err) {
-    await t.rollback();
     throw err;
   }
 }

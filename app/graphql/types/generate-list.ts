@@ -9,9 +9,9 @@ import MetaType from './meta';
  * 生成列表的类型
  * 为了方便统一meta信息
  */
-export default function generateListType(name: string, item: GraphQLType): GraphQLObjectType {
+export function generateListType(item: GraphQLType): GraphQLObjectType {
   return new GraphQLObjectType({
-    name: name,
+    name: item['name'] + 'List',
     fields: {
       data: {
         type: new GraphQLList(item),

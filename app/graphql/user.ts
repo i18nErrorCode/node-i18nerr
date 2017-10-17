@@ -22,7 +22,8 @@ const args = {
  */
 async function extendReq(req: any, params: any) {
   const Authentication: string =
-    params.token || req.headers.authentication || req.cookies.Authentication || '';
+    params.token || req.headers.authorization || req.cookies.Authentication || '';
+  console.info(`Token: ${req.token}`);
   req.token = await verifyToken(Authentication);
 }
 

@@ -21,7 +21,7 @@ const loginEntity = {
 };
 
 const registryEntity = {
-  type: UserType,
+  type: LoginType,
   description: '注册',
   args: {
     argv: {

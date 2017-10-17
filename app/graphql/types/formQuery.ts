@@ -12,7 +12,7 @@ import {
 /**
  * 用户请求列表的query
  */
-export default new GraphQLInputObjectType({
+export const FormQuery = new GraphQLInputObjectType({
   name: 'FormQuery',
   fields: {
     limit: {

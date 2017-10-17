@@ -12,6 +12,8 @@ import {
   GraphQLInputObjectType
 } from 'graphql';
 
+import { generateListType } from './generate-list';
+
 const UserFields = {
   uid: {
     type: new GraphQLNonNull(GraphQLString),
@@ -40,3 +42,5 @@ export const TableType = new GraphQLObjectType({
     }
   }
 });
+
+export const TableListType = generateListType(TableType);
