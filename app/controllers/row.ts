@@ -15,6 +15,20 @@ export interface CreateRowArgv$ {
   value_tw: string;
 }
 
+export interface UpdateRowArgv$ {
+  id: string;
+  key?: string;
+  value_en?: string;
+  value_cn?: string;
+  value_tw?: string;
+  isActive?: boolean;
+}
+
+/**
+ * 创建row
+ * @param {CreateRowArgv$} argv
+ * @returns {Promise<any>}
+ */
 export async function createRow(argv: CreateRowArgv$) {
   const { tid, uid, key, value_cn, value_en, value_tw } = argv;
   const t: any = await sequelize.transaction();
@@ -42,6 +56,54 @@ export async function createRow(argv: CreateRowArgv$) {
         transaction: t
       }
     );
+
+    await t.commit();
+
+    return row.dataValues;
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
+}
+
+/**
+ * 更新row
+ * @param {UpdateRowArgv$} argv
+ * @returns {Promise<any>}
+ */
+export async function updateRow(argv: UpdateRowArgv$) {
+  const { id, key, value_cn, value_en, value_tw, isActive } = argv;
+  const t: any = await sequelize.transaction();
+  try {
+    const row = await RowModel.findOne({
+      where: { id },
+      transaction: t,
+      lock: t.LOCK.UPDATE
+    });
+
+    if (!row) {
+      throw new Error(`No data`);
+    }
+
+    if (key) {
+      await row.update({ key }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
+
+    if (value_cn) {
+      await row.update({ value_cn }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
+
+    if (value_en) {
+      await row.update({ value_en }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
+
+    if (value_tw) {
+      await row.update({ value_tw }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
+
+    if (isActive) {
+      await row.update({ isActive }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
 
     await t.commit();
 
