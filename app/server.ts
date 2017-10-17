@@ -16,6 +16,8 @@ import sequelize from './postgres/index';
 // Routers
 import GraphqlRouter from './routers/graphql';
 
+import { initUser } from './controllers/user';
+
 const app: express.Application = express();
 
 // 端口监听
@@ -98,6 +100,7 @@ class Program extends EventEmitter {
    * @returns {Promise<any>}
    */
   async onInitData(): Promise<void> {
+    await initUser();
     console.info(`初始化数据成功`);
   }
 

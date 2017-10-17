@@ -19,6 +19,12 @@ const UserModel = sequelize.define('user', {
     allowNull: false,
     comment: '用户名'
   },
+  nickname: {
+    type: Sequelize.STRING,
+    required: true,
+    allowNull: false,
+    comment: '用户昵称'
+  },
   password: {
     type: Sequelize.STRING,
     required: true,

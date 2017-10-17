@@ -4,18 +4,29 @@
 import UserModel from '../postgres/models/user.model';
 import sequelize from '../postgres/index';
 import { md5, RFC3339NanoMaper, initQuery, sortMap } from '../utils';
+import { FormQuery$ } from '../graphql/types/formQuery';
 
 // service
 import { generateToken, verifyToken } from '../service/jwt';
 
-interface CreateArgv$ {
+export interface CreateArgv$ {
   username: string;
   password: string;
 }
 
-interface LoginArgv$ {
+export interface LoginArgv$ {
   username: string;
   password: string;
+}
+
+export interface UpdateUserArgv$ {
+  username: string;
+}
+
+export async function initUser() {
+  try {
+    await createUser({ username: '111111', password: '111111' });
+  } catch {}
 }
 
 /**
@@ -43,6 +54,7 @@ export async function createUser(argv: CreateArgv$): Promise<any> {
     const row: any = await UserModel.create(
       {
         username,
+        nickname: username,
         password: md5Password
       },
       {
@@ -66,7 +78,7 @@ export async function createUser(argv: CreateArgv$): Promise<any> {
  * @param {LoginArgv$} argv
  * @returns {Promise<any>}
  */
-export async function login(argv: LoginArgv$): Promise<any> {
+export async function login(argv: LoginArgv$) {
   const { username, password } = argv;
   const t: any = await sequelize.transaction();
   try {
@@ -102,7 +114,7 @@ export async function login(argv: LoginArgv$): Promise<any> {
  * @param {string} uid
  * @returns {Promise<any>}
  */
-export async function getUserInfo(uid: string): Promise<any> {
+export async function getUserInfo(uid: string) {
   const t: any = await sequelize.transaction();
   try {
     const row: any = await UserModel.findOne({
@@ -112,6 +124,11 @@ export async function getUserInfo(uid: string): Promise<any> {
         level: t.LOCK.UPDATE
       }
     });
+
+    if (!row) {
+      throw new Error(`No data`);
+    }
+
     const data = row.dataValues;
     await t.commit();
     return data;
@@ -125,19 +142,37 @@ export async function getUserInfo(uid: string): Promise<any> {
  * 获取用户列表
  * @returns {Promise<any>}
  */
-export async function getUserList(query): Promise<any> {
-  const t: any = await sequelize.transaction();
+export async function getUserList(query: FormQuery$) {
+  let { page, limit, skip, sort, keyJson, songo } = initQuery(query);
+
   try {
-    const row: any = await UserModel.find({
-      where: {},
-      transaction: t
+    const result: any = {};
+    const queryResult: any = await UserModel.findAndCountAll({
+      limit,
+      offset: limit * page,
+      order: sortMap(sort),
+      where: {
+        ...songo,
+        isActive: true
+      }
     });
-    const data = row.dataValues;
-    await t.commit();
-    return data;
+    const rows = queryResult.rows || [];
+    const count = queryResult.count || 0;
+    const data = rows.map((row: any) => row.dataValues);
+    result.data = data;
+    result.meta = {
+      page,
+      limit,
+      skip,
+      count,
+      num: data.length,
+      sort,
+      keyJson
+    };
+    return result;
   } catch (err) {
-    await t.rollback();
     throw err;
   }
 }
-export async function updateUserInfo(): Promise<any> {}
+
+export async function updateUserInfo(argv: UpdateUserArgv$) {}

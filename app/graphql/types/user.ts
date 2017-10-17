@@ -20,23 +20,43 @@ const UserFields = {
   username: {
     type: new GraphQLNonNull(GraphQLString),
     description: '用户名'
+  },
+  nickname: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: '用户昵称'
   }
 };
 
 export const UserType = new GraphQLObjectType({
   name: 'UserType',
-  fields: UserFields
+  fields: {
+    uid: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    username: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    nickname: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  }
 });
 
 export const LoginType = new GraphQLObjectType({
   name: 'LoginType',
   fields: {
-    ...UserFields,
-    ...{
-      token: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'Token'
-      }
+    uid: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    username: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    nickname: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    token: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Token'
     }
   }
 });
