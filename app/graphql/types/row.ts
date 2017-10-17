@@ -12,6 +12,8 @@ import {
   GraphQLInputObjectType
 } from 'graphql';
 
+import { generateListType } from './generate-list';
+
 export const RowType = new GraphQLObjectType({
   name: 'RowType',
   fields: {
@@ -38,3 +40,5 @@ export const RowType = new GraphQLObjectType({
     }
   }
 });
+
+export const RowListType = generateListType(RowType);

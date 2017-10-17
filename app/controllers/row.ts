@@ -4,6 +4,7 @@
 import RowModel from '../postgres/models/row.model';
 import sequelize from '../postgres/index';
 import { RFC3339NanoMaper, initQuery, sortMap } from '../utils';
+import { FormQuery$ } from '../graphql/types/formQuery';
 
 export interface CreateRowArgv$ {
   uid: string;
@@ -85,21 +86,35 @@ export async function getRow(uid: string, tid: string, key: string) {
  * 获取列表
  * @returns {Promise<any>}
  */
-export async function getRowList() {
-  const t: any = await sequelize.transaction();
+export async function getRowList(query: FormQuery$) {
+  let { page, limit, skip, sort, keyJson, songo } = initQuery(query);
+
   try {
-    const row: any = await RowModel.find({
-      where: {},
-      transaction: t,
-      lock: {
-        level: t.LOCK.UPDATE
+    const result: any = {};
+    const queryResult: any = await RowModel.findAndCountAll({
+      limit,
+      offset: limit * page,
+      order: sortMap(sort),
+      where: {
+        ...songo,
+        isActive: true
       }
     });
-    const data = row.dataValues;
-    await t.commit();
-    return data;
+    const rows = queryResult.rows || [];
+    const count = queryResult.count || 0;
+    const data = rows.map((row: any) => row.dataValues);
+    result.data = data;
+    result.meta = {
+      page,
+      limit,
+      skip,
+      count,
+      num: data.length,
+      sort,
+      keyJson
+    };
+    return result;
   } catch (err) {
-    await t.rollback();
     throw err;
   }
 }
