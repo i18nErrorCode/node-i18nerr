@@ -10,12 +10,12 @@ const getTableInfo = {
   type: TableType,
   description: '获取表信息',
   args: {
-    name: {
+    id: {
       type: new GraphQLNonNull(GraphQLString)
     }
   },
   async resolve(root: any, params: any, req: any) {
-    return await getTable(params.name);
+    return await getTable(params.id);
   }
 };
 

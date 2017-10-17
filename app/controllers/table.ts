@@ -1,10 +1,18 @@
 /**
  * Created by axetroy on 17-7-19.
  */
+import * as _ from 'lodash';
 import TableModel from '../postgres/models/table.model';
 import sequelize from '../postgres/index';
 import { RFC3339NanoMaper, initQuery, sortMap } from '../utils';
 import { FormQuery$ } from '../graphql/types/formQuery';
+
+export interface UpdateTableArgv$ {
+  uid: string;
+  id: string;
+  name: string;
+  isActive: boolean;
+}
 
 /**
  * 创建table
@@ -45,17 +53,53 @@ export async function createTable(uid: string, name: string) {
 }
 
 /**
- * 获取table
- * @param {string} name
+ * 更新table
+ * @param {UpdateTableArgv$} argv
  * @returns {Promise<any>}
  */
-export async function getTable(name: string) {
+export async function updateTable(argv: UpdateTableArgv$) {
+  const { id, uid, name, isActive } = argv;
   const t: any = await sequelize.transaction();
 
   try {
     const row = await TableModel.findOne({
       where: {
-        name
+        id,
+        uid
+      },
+      transaction: t,
+      lock: t.LOCK.UPDATE
+    });
+
+    if (_.isString(name)) {
+      await row.update({ name }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
+
+    if (_.isBoolean(isActive)) {
+      await row.update({ isActive }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
+
+    await t.commit();
+
+    return row.dataValues;
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
+}
+
+/**
+ * 获取table
+ * @param {string} id
+ * @returns {Promise<any>}
+ */
+export async function getTable(id: string) {
+  const t: any = await sequelize.transaction();
+
+  try {
+    const row = await TableModel.findOne({
+      where: {
+        id
       },
       transaction: t,
       lock: t.LOCK.UPDATE
