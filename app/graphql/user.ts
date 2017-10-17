@@ -23,8 +23,10 @@ const args = {
 async function extendReq(req: any, params: any) {
   const Authentication: string =
     params.token || req.headers.authorization || req.cookies.Authentication || '';
-  console.info(`Token: ${req.token}`);
   req.token = await verifyToken(Authentication);
+  if (!req.token || !req.token.uid) {
+    throw new Error(`Invalid token`);
+  }
 }
 
 export default new GraphQLSchema({

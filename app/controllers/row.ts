@@ -65,13 +65,18 @@ export async function getRow(uid: string, tid: string, key: string) {
   try {
     const row = await RowModel.findOne({
       where: {
-        uid,
+        // uid,
         tid,
-        key
+        key,
+        isActive: true
       },
       transaction: t,
       lock: t.LOCK.UPDATE
     });
+
+    if (!row) {
+      throw new Error(`No data`);
+    }
 
     await t.commit();
 
