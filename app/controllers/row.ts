@@ -17,6 +17,7 @@ export interface CreateRowArgv$ {
 
 export interface UpdateRowArgv$ {
   id: string;
+  uid?: string;
   key?: string;
   value_en?: string;
   value_cn?: string;
@@ -72,11 +73,11 @@ export async function createRow(argv: CreateRowArgv$) {
  * @returns {Promise<any>}
  */
 export async function updateRow(argv: UpdateRowArgv$) {
-  const { id, key, value_cn, value_en, value_tw, isActive } = argv;
+  const { id, uid, key, value_cn, value_en, value_tw, isActive } = argv;
   const t: any = await sequelize.transaction();
   try {
     const row = await RowModel.findOne({
-      where: { id },
+      where: { id, uid },
       transaction: t,
       lock: t.LOCK.UPDATE
     });
