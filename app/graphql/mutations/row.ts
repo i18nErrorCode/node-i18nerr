@@ -59,16 +59,16 @@ const updateRowEntity = {
             type: new GraphQLNonNull(GraphQLString)
           },
           key: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
           },
           value_en: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
           },
           value_cn: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
           },
           value_tw: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
           }
         }
       })

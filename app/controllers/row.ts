@@ -77,7 +77,7 @@ export async function updateRow(argv: UpdateRowArgv$) {
   const t: any = await sequelize.transaction();
   try {
     const row = await RowModel.findOne({
-      where: { id, uid },
+      where: { id },
       transaction: t,
       lock: t.LOCK.UPDATE
     });
