@@ -23,6 +23,11 @@ export interface UpdateTableArgv$ {
   isActive?: boolean;
 }
 
+/**
+ * 获取组成员
+ * @param {string[]} members
+ * @returns {Promise<any[]>}
+ */
 async function resolveMember(members: string[] = []) {
   const users: any[] = [];
   members = [...members];
@@ -128,6 +133,63 @@ export async function addMember(uid: string, id: string, newMemberId: string) {
     await t.commit();
 
     return member;
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
+}
+
+/**
+ * 删除组成员
+ * @param {string} uid
+ * @param {string} id
+ * @param {string} newMemberUserName
+ * @returns {Promise<any>}
+ */
+export async function removeMemberByUserName(uid: string, id: string, newMemberUserName: string) {
+  const userInfo = await getUserInfoByName(newMemberUserName);
+  return await removeMember(uid, id, userInfo.uid);
+}
+
+/**
+ * 删除组成员
+ * @param {string} uid
+ * @param {string} id
+ * @param {string} oldMemberId
+ * @returns {Promise<Array | any | {type; required; allowNull} | {type}>}
+ */
+export async function removeMember(uid: string, id: string, oldMemberId: string) {
+  const t: any = await sequelize.transaction();
+  try {
+    const row = await TableModel.findOne({
+      where: {
+        id,
+        uid
+      },
+      transaction: t,
+      lock: t.LOCK.UPDATE
+    });
+
+    if (!row) {
+      throw new Error(`No data`);
+    }
+
+    const member = row.member || [];
+
+    const index = member.findIndex(m => m === oldMemberId);
+
+    const shouldUpdate: boolean = index >= 0 && oldMemberId !== row.uid;
+
+    const newMember = shouldUpdate ? member.splice(index, 1) : member;
+
+    // 创建者始终拥有权限
+    if (shouldUpdate) {
+      await row.update({ member: newMember }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
+
+    await t.commit();
+
+    return newMember;
   } catch (err) {
     await t.rollback();
     throw err;

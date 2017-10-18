@@ -3,7 +3,12 @@
  */
 
 import { GraphQLBoolean, GraphQLInputObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
-import { createTable, updateTable, addMemberByUserName } from '../../controllers/table';
+import {
+  createTable,
+  updateTable,
+  addMemberByUserName,
+  removeMemberByUserName
+} from '../../controllers/table';
 import { TableType } from '../types/table';
 
 const createTableEntity = {
@@ -66,13 +71,44 @@ const updateTableEntity = {
   }
 };
 
-const AddMemberEntity = {};
+const changeMemberEntity = {
+  type: TableType,
+  description: '添加成员',
+  args: {
+    argv: {
+      type: new GraphQLInputObjectType({
+        name: 'ChangeMemberArgv',
+        fields: {
+          id: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          username: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          isRemove: {
+            type: GraphQLBoolean
+          }
+        }
+      })
+    }
+  },
+  async resolve(root: any, { argv }: any, req: any) {
+    const token = req.token;
+    const { isRemove, id, username } = argv;
+    if (isRemove === true) {
+      return await removeMemberByUserName(token.uid, id, username);
+    } else {
+      return await addMemberByUserName(token.uid, id, username);
+    }
+  }
+};
 
 export const user = {
   Public: {},
   Me: {
     createTable: createTableEntity,
-    updateTable: updateTableEntity
+    updateTable: updateTableEntity,
+    changeMember: changeMemberEntity
   }
 };
 
@@ -80,6 +116,7 @@ export const admin = {
   Public: {},
   Me: {
     createTable: createTableEntity,
-    updateTable: updateTableEntity
+    updateTable: updateTableEntity,
+    changeMember: changeMemberEntity
   }
 };
