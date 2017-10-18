@@ -26,7 +26,7 @@ export const TableType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'uuid of creator'
     },
-    user: user,
+    owner: user,
     name: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'table name'

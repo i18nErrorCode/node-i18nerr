@@ -24,7 +24,7 @@ export const RowType = new GraphQLObjectType({
     uid: {
       type: new GraphQLNonNull(GraphQLString)
     },
-    user: user,
+    owner: user,
     tid: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'table id'
