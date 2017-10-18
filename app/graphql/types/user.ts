@@ -49,6 +49,12 @@ export const UserType = new GraphQLObjectType({
     },
     nickname: {
       type: new GraphQLNonNull(GraphQLString)
+    },
+    createdAt: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    updatedAt: {
+      type: new GraphQLNonNull(GraphQLString)
     }
   }
 });
@@ -68,6 +74,12 @@ export const LoginType = new GraphQLObjectType({
     token: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'Token'
+    },
+    createdAt: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    updatedAt: {
+      type: new GraphQLNonNull(GraphQLString)
     }
   }
 });

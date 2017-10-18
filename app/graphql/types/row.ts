@@ -40,6 +40,12 @@ export const RowType = new GraphQLObjectType({
     },
     value_tw: {
       type: new GraphQLNonNull(GraphQLString)
+    },
+    createdAt: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    updatedAt: {
+      type: new GraphQLNonNull(GraphQLString)
     }
   }
 });

@@ -45,6 +45,12 @@ export const TableType = new GraphQLObjectType({
           }
         })
       )
+    },
+    createdAt: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    updatedAt: {
+      type: new GraphQLNonNull(GraphQLString)
     }
   }
 });
