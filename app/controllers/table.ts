@@ -143,11 +143,11 @@ export async function addMember(uid: string, id: string, newMemberId: string) {
  * 删除组成员
  * @param {string} uid
  * @param {string} id
- * @param {string} newMemberUserName
+ * @param {string} oldMemberUserName
  * @returns {Promise<any>}
  */
-export async function removeMemberByUserName(uid: string, id: string, newMemberUserName: string) {
-  const userInfo = await getUserInfoByName(newMemberUserName);
+export async function removeMemberByUserName(uid: string, id: string, oldMemberUserName: string) {
+  const userInfo = await getUserInfoByName(oldMemberUserName);
   return await removeMember(uid, id, userInfo.uid);
 }
 
@@ -163,8 +163,7 @@ export async function removeMember(uid: string, id: string, oldMemberId: string)
   try {
     const row = await TableModel.findOne({
       where: {
-        id,
-        uid
+        id
       },
       transaction: t,
       lock: t.LOCK.UPDATE
@@ -174,22 +173,28 @@ export async function removeMember(uid: string, id: string, oldMemberId: string)
       throw new Error(`No data`);
     }
 
+    if (row.uid !== uid) {
+      throw new Error(`Permission deny`);
+    }
+
     const member = row.member || [];
 
     const index = member.findIndex(m => m === oldMemberId);
 
     const shouldUpdate: boolean = index >= 0 && oldMemberId !== row.uid;
 
-    const newMember = shouldUpdate ? member.splice(index, 1) : member;
+    if (shouldUpdate) {
+      member.splice(index, 1);
+    }
 
     // 创建者始终拥有权限
     if (shouldUpdate) {
-      await row.update({ member: newMember }, { transaction: t, lock: t.LOCK.UPDATE });
+      await row.update({ member }, { transaction: t, lock: t.LOCK.UPDATE });
     }
 
     await t.commit();
 
-    return newMember;
+    return member;
   } catch (err) {
     await t.rollback();
     throw err;

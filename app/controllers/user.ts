@@ -126,7 +126,7 @@ export async function getUserInfo(uid: string) {
     });
 
     if (!row) {
-      throw new Error(`No data`);
+      throw new Error(`User ${uid} not exist!`);
     }
 
     const data = row.dataValues;
@@ -155,7 +155,7 @@ export async function getUserInfoByName(name: string) {
     });
 
     if (!row) {
-      throw new Error(`No data`);
+      throw new Error(`User ${name} not exist!`);
     }
 
     const data = row.dataValues;

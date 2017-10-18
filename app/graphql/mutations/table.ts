@@ -2,7 +2,13 @@
  * Created by axetroy on 17-7-14.
  */
 
-import { GraphQLBoolean, GraphQLInputObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
+import {
+  GraphQLBoolean,
+  GraphQLInputObjectType,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLString
+} from 'graphql';
 import {
   createTable,
   updateTable,
@@ -72,7 +78,7 @@ const updateTableEntity = {
 };
 
 const changeMemberEntity = {
-  type: TableType,
+  type: new GraphQLList(GraphQLString),
   description: '添加成员',
   args: {
     argv: {
