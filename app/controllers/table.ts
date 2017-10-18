@@ -4,10 +4,10 @@
 import * as _ from 'lodash';
 import TableModel from '../postgres/models/table.model';
 import sequelize from '../postgres/index';
-import { RFC3339NanoMaper, initQuery, sortMap } from '../utils';
+import { initQuery, sortMap } from '../utils';
 import { FormQuery$ } from '../graphql/types/formQuery';
 
-import { getUserInfoByName } from './user';
+import { getUserInfoByName, getUserInfo } from './user';
 
 export interface CreateTableArgv$ {
   uid: string;
@@ -21,6 +21,23 @@ export interface UpdateTableArgv$ {
   name?: string;
   description?: string;
   isActive?: boolean;
+}
+
+async function resolveMember(members: string[] = []) {
+  const users: any[] = [];
+  members = [...members];
+  while (members.length) {
+    const uid: string = <string>members.shift();
+    if (typeof uid !== 'string') continue;
+    let userInfo = {};
+    try {
+      userInfo = await getUserInfo(uid);
+    } catch (err) {
+      console.log(err);
+    }
+    users.push(userInfo);
+  }
+  return users;
 }
 
 /**
@@ -55,6 +72,10 @@ export async function createTable(argv: CreateTableArgv$) {
     );
 
     await t.commit();
+
+    const data = row.dataValues;
+
+    data.member = await resolveMember(data.member);
 
     return row.dataValues;
   } catch (err) {
@@ -155,7 +176,11 @@ export async function updateTable(argv: UpdateTableArgv$) {
 
     await t.commit();
 
-    return row.dataValues;
+    const data = row.dataValues;
+
+    data.member = await resolveMember(data.member);
+
+    return data;
   } catch (err) {
     await t.rollback();
     throw err;
@@ -181,7 +206,11 @@ export async function getTable(id: string) {
 
     await t.commit();
 
-    return row.dataValues;
+    const data = row.dataValues;
+
+    data.member = await resolveMember(data.member);
+
+    return data;
   } catch (err) {
     await t.rollback();
     throw err;
@@ -210,6 +239,12 @@ export async function getTableList(query: FormQuery$, filter = {}) {
     const rows = queryResult.rows || [];
     const count = queryResult.count || 0;
     const data = rows.map((row: any) => row.dataValues);
+
+    for (let i = 0; i < data.length; i++) {
+      const d = data[i];
+      d.member = await resolveMember(d.member);
+    }
+
     result.data = data;
     result.meta = {
       page,

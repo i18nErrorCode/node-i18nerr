@@ -3,7 +3,7 @@
  */
 
 import { GraphQLBoolean, GraphQLInputObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
-import { createTable, updateTable } from '../../controllers/table';
+import { createTable, updateTable, addMemberByUserName } from '../../controllers/table';
 import { TableType } from '../types/table';
 
 const createTableEntity = {
@@ -65,6 +65,8 @@ const updateTableEntity = {
     return await updateTable({ id, uid: token.uid, name, description, isActive });
   }
 };
+
+const AddMemberEntity = {};
 
 export const user = {
   Public: {},

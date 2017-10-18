@@ -19,21 +19,32 @@ export const TableType = new GraphQLObjectType({
   name: 'TableType',
   fields: {
     id: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'table id'
+      type: new GraphQLNonNull(GraphQLString)
     },
     uid: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'uuid of creator'
+      type: new GraphQLNonNull(GraphQLString)
     },
     owner: user,
     name: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'table name'
+      type: new GraphQLNonNull(GraphQLString)
     },
     description: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'table name'
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    member: {
+      type: new GraphQLList(
+        new GraphQLObjectType({
+          name: 'MemberType',
+          fields: {
+            uid: {
+              type: GraphQLString
+            },
+            username: {
+              type: GraphQLString
+            }
+          }
+        })
+      )
     }
   }
 });
