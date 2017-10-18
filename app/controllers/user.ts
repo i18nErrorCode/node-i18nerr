@@ -139,6 +139,35 @@ export async function getUserInfo(uid: string) {
 }
 
 /**
+ * get user info by username
+ * @param {string} name
+ * @returns {Promise<any>}
+ */
+export async function getUserInfoByName(name: string) {
+  const t: any = await sequelize.transaction();
+  try {
+    const row: any = await UserModel.findOne({
+      where: { username: name },
+      transaction: t,
+      lock: {
+        level: t.LOCK.UPDATE
+      }
+    });
+
+    if (!row) {
+      throw new Error(`No data`);
+    }
+
+    const data = row.dataValues;
+    await t.commit();
+    return data;
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
+}
+
+/**
  * 获取用户列表
  * @returns {Promise<any>}
  */

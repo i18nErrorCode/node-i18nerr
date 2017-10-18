@@ -7,6 +7,8 @@ import sequelize from '../postgres/index';
 import { RFC3339NanoMaper, initQuery, sortMap } from '../utils';
 import { FormQuery$ } from '../graphql/types/formQuery';
 
+import { getUserInfoByName } from './user';
+
 export interface CreateTableArgv$ {
   uid: string;
   name: string;
@@ -59,6 +61,18 @@ export async function createTable(argv: CreateTableArgv$) {
     await t.rollback();
     throw err;
   }
+}
+
+/**
+ * 给table添加新成员, 通过用户名的方式
+ * @param {string} uid
+ * @param {string} id
+ * @param {string} newMemberUserName
+ * @returns {Promise<Array | any | {type; required; allowNull}>}
+ */
+export async function addMemberByUserName(uid: string, id: string, newMemberUserName: string) {
+  const userInfo = await getUserInfoByName(newMemberUserName);
+  return await addMember(uid, id, userInfo.uid);
 }
 
 /**
