@@ -13,6 +13,7 @@ import {
 } from 'graphql';
 
 import { generateListType } from './generate-list';
+import { user } from './user';
 
 export const TableType = new GraphQLObjectType({
   name: 'TableType',
@@ -25,6 +26,7 @@ export const TableType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'uuid of creator'
     },
+    user: user,
     name: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'table name'

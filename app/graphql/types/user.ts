@@ -12,18 +12,29 @@ import {
   GraphQLInputObjectType
 } from 'graphql';
 
-const UserFields = {
-  uid: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: '用户uuid'
-  },
-  username: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: '用户名'
-  },
-  nickname: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: '用户昵称'
+import { getUserInfo } from '../../controllers/user';
+
+export const user = {
+  type: new GraphQLObjectType({
+    name: 'UserInfoType',
+    fields: {
+      uid: {
+        type: GraphQLString
+      },
+      username: {
+        type: GraphQLString
+      }
+    }
+  }),
+  async resolve(parent: any, params: any, req: any) {
+    const uid: string = parent.uid;
+    let userInfo = {};
+    try {
+      userInfo = await getUserInfo(uid);
+    } catch (err) {
+      console.error(err);
+    }
+    return userInfo;
   }
 };
 
