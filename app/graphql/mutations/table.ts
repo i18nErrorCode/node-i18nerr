@@ -16,15 +16,22 @@ const createTableEntity = {
         fields: {
           name: {
             type: new GraphQLNonNull(GraphQLString)
+          },
+          description: {
+            type: new GraphQLNonNull(GraphQLString)
           }
         }
       })
     }
   },
   async resolve(root: any, { argv }: any, req: any) {
-    const { name } = argv;
+    const { name, description } = argv;
     const token = req.token;
-    return await createTable(token.uid, name);
+    return await createTable({
+      uid: token.uid,
+      name,
+      description
+    });
   }
 };
 
@@ -42,6 +49,9 @@ const updateTableEntity = {
           name: {
             type: GraphQLString
           },
+          description: {
+            type: GraphQLString
+          },
           isActive: {
             type: GraphQLBoolean
           }
@@ -50,9 +60,9 @@ const updateTableEntity = {
     }
   },
   async resolve(root: any, { argv }: any, req: any) {
-    const { id, name, isActive } = argv;
+    const { id, name, description, isActive } = argv;
     const token = req.token;
-    return await updateTable({ id, uid: token.uid, name, isActive });
+    return await updateTable({ id, uid: token.uid, name, description, isActive });
   }
 };
 

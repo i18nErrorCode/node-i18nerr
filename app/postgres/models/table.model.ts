@@ -31,6 +31,11 @@ const TableModel = sequelize.define('table', {
     allowNull: false,
     unique: UNIT_KEY // 联合唯一
   },
+  description: {
+    type: Sequelize.STRING,
+    required: true,
+    allowNull: false
+  },
   note: {
     type: Sequelize.STRING,
     required: false,

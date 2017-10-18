@@ -14,17 +14,6 @@ import {
 
 import { generateListType } from './generate-list';
 
-const UserFields = {
-  uid: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: '用户uuid'
-  },
-  username: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: '用户名'
-  }
-};
-
 export const TableType = new GraphQLObjectType({
   name: 'TableType',
   fields: {
@@ -37,6 +26,10 @@ export const TableType = new GraphQLObjectType({
       description: 'uuid of creator'
     },
     name: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'table name'
+    },
+    description: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'table name'
     }

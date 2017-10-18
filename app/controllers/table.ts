@@ -7,20 +7,27 @@ import sequelize from '../postgres/index';
 import { RFC3339NanoMaper, initQuery, sortMap } from '../utils';
 import { FormQuery$ } from '../graphql/types/formQuery';
 
+export interface CreateTableArgv$ {
+  uid: string;
+  name: string;
+  description: string;
+}
+
 export interface UpdateTableArgv$ {
   id: string;
   uid?: string;
   name?: string;
+  description?: string;
   isActive?: boolean;
 }
 
 /**
  * 创建table
- * @param {string} uid
- * @param {string} name
+ * @param {CreateTableArgv$} argv
  * @returns {Promise<any>}
  */
-export async function createTable(uid: string, name: string) {
+export async function createTable(argv: CreateTableArgv$) {
+  const { uid, name, description } = argv;
   const t: any = await sequelize.transaction();
   try {
     const oldRow = await TableModel.findOne({
@@ -37,6 +44,7 @@ export async function createTable(uid: string, name: string) {
       {
         uid,
         name,
+        description,
         member: [uid]
       },
       {
@@ -97,7 +105,7 @@ export async function addMember(uid: string, id: string, newMemberId: string) {
  * @returns {Promise<any>}
  */
 export async function updateTable(argv: UpdateTableArgv$) {
-  const { id, uid, name, isActive } = argv;
+  const { id, uid, name, description, isActive } = argv;
   const t: any = await sequelize.transaction();
 
   try {
@@ -121,6 +129,10 @@ export async function updateTable(argv: UpdateTableArgv$) {
 
     if (_.isString(name)) {
       await row.update({ name }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
+
+    if (_.isString(description)) {
+      await row.update({ description }, { transaction: t, lock: t.LOCK.UPDATE });
     }
 
     if (_.isBoolean(isActive)) {
