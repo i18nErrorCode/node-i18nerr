@@ -20,6 +20,11 @@ const TableModel = sequelize.define('table', {
     unique: UNIT_KEY, // 联合唯一
     allowNull: false
   },
+  member: {
+    type: Sequelize.ARRAY(Sequelize.UUID),
+    required: true,
+    allowNull: true
+  },
   name: {
     type: Sequelize.STRING,
     required: true,

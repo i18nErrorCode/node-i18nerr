@@ -36,7 +36,8 @@ export async function createTable(uid: string, name: string) {
     const row: any = await TableModel.create(
       {
         uid,
-        name
+        name,
+        member: [uid]
       },
       {
         transaction: t
@@ -46,6 +47,44 @@ export async function createTable(uid: string, name: string) {
     await t.commit();
 
     return row.dataValues;
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
+}
+
+/**
+ * 给table添加新成员
+ * @param {string} uid
+ * @param {string} id
+ * @param {string} newMemberId
+ * @returns {Promise<Array | any | {type; required; allowNull}>}
+ */
+export async function addMember(uid: string, id: string, newMemberId: string) {
+  const t: any = await sequelize.transaction();
+  try {
+    const row = await TableModel.findOne({
+      where: {
+        id,
+        uid
+      },
+      transaction: t,
+      lock: t.LOCK.UPDATE
+    });
+
+    if (!row) {
+      throw new Error(`No data`);
+    }
+
+    const member = row.member || [];
+
+    member.push(newMemberId);
+
+    await row.update({ member }, { transaction: t, lock: t.LOCK.UPDATE });
+
+    await t.commit();
+
+    return member;
   } catch (err) {
     await t.rollback();
     throw err;
@@ -70,6 +109,15 @@ export async function updateTable(argv: UpdateTableArgv$) {
       transaction: t,
       lock: t.LOCK.UPDATE
     });
+
+    if (!row) {
+      throw new Error(`No data`);
+    }
+
+    // 校验用户是否有权限更改table
+    if (row !== uid && row.member.includes(uid) === false) {
+      throw new Error(`Permission deny`);
+    }
 
     if (_.isString(name)) {
       await row.update({ name }, { transaction: t, lock: t.LOCK.UPDATE });
@@ -118,7 +166,7 @@ export async function getTable(id: string) {
  * 获取列表
  * @returns {Promise<any>}
  */
-export async function getTableList(query: FormQuery$) {
+export async function getTableList(query: FormQuery$, filter = {}) {
   let { page, limit, skip, sort, keyJson, songo } = initQuery(query);
 
   try {
@@ -129,6 +177,7 @@ export async function getTableList(query: FormQuery$) {
       order: sortMap(sort),
       where: {
         ...songo,
+        ...filter,
         isActive: true
       }
     });
