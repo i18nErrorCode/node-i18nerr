@@ -14,6 +14,9 @@ const createRowEntity = {
       type: new GraphQLInputObjectType({
         name: 'CreateRowArgv',
         fields: {
+          id: {
+            type: GraphQLString
+          },
           tid: {
             type: new GraphQLNonNull(GraphQLString)
           },
@@ -57,6 +60,9 @@ const updateRowEntity = {
         fields: {
           id: {
             type: new GraphQLNonNull(GraphQLString)
+          },
+          tid: {
+            type: GraphQLString
           },
           key: {
             type: GraphQLString
