@@ -15,6 +15,7 @@ import sequelize from './postgres/index';
 
 // Routers
 import GraphqlRouter from './routers/graphql';
+import exportsRouter from './routers/exports';
 
 import { initUser } from './controllers/user';
 
@@ -112,6 +113,7 @@ class Program extends EventEmitter {
   async onServer(port: number = SERVER_PORT): Promise<any> {
     // graphql 接口
     app.use('/api', GraphqlRouter());
+    app.use('/api', exportsRouter());
 
     app.use((req, res, next) => {
       res.status(404).json({ error: [{ message: 'Invalid url' }] });
