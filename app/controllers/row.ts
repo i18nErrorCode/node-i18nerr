@@ -5,6 +5,7 @@ import RowModel from '../postgres/models/row.model';
 import sequelize from '../postgres/index';
 import { RFC3339NanoMaper, initQuery, sortMap } from '../utils';
 import { FormQuery$ } from '../graphql/types/formQuery';
+import { hasMember } from './table';
 
 export interface CreateRowArgv$ {
   uid: string;
@@ -17,7 +18,7 @@ export interface CreateRowArgv$ {
 
 export interface UpdateRowArgv$ {
   id: string;
-  uid?: string;
+  uid: string;
   key?: string;
   value_en?: string;
   value_cn?: string;
@@ -84,6 +85,12 @@ export async function updateRow(argv: UpdateRowArgv$) {
 
     if (!row) {
       throw new Error(`No data`);
+    }
+
+    const havePermission: boolean = await hasMember(row.tid, uid);
+
+    if (havePermission !== true) {
+      throw new Error(`Permission deny`);
     }
 
     if (key) {
