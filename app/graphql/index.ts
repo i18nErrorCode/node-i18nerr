@@ -3,6 +3,7 @@
  */
 const fs = require('fs-extra');
 const path = require('path');
+const _ = require('lodash');
 
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
 
@@ -15,22 +16,22 @@ const queryFiles: string[] = fs.readdirSync(queryPath);
 const mutationsFiles: string[] = fs.readdirSync(mutationsPath);
 
 // load query and mutation
-let query: any = {};
+let query: any = { Public: {}, Me: {} };
 let mutation: any = {};
 
 while (queryFiles.length) {
   const file: string = <string>queryFiles.shift();
-  query = { ...query, ...require(path.join(queryPath, file)) };
+  let m = require(path.join(queryPath, file));
+  m = m.default ? m.default : m;
+  query = { Public: { ...query.Public, ...m.Public }, Me: { ...query.Me, ...m.Me } };
 }
-
-query = query.default ? query.default : query;
 
 while (mutationsFiles.length) {
   const file: string = <string>mutationsFiles.shift();
-  mutation = { ...mutation, ...require(path.join(queryPath, file)) };
+  let m = require(path.join(mutationsPath, file));
+  m = m.default ? m.default : m;
+  mutation = { Public: { ...mutation.Public, ...m.Public }, Me: { ...mutation.Me, ...m.Me } };
 }
-
-mutation = mutation.default ? mutation.default : mutation;
 
 const args = {
   token: {

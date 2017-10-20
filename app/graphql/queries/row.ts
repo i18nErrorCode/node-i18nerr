@@ -38,13 +38,10 @@ const getRows = {
   }
 };
 
-export default  {
+export default {
   Public: {
     row: getRowInfo,
     rows: getRows
   },
-  Me: {
-    row: getRowInfo,
-    rows: getRows
-  }
+  Me: {}
 };

@@ -15,9 +15,7 @@ const getUserInfoEntity = {
 };
 
 export default {
-  Public: {
-    user: getUserInfoEntity
-  },
+  Public: {},
   Me: {
     user: getUserInfoEntity
   }

@@ -53,8 +53,6 @@ export default {
     tables: getTables
   },
   Me: {
-    table: getTableInfo,
-    tables: getTables,
     haveMember: hasMemberEntity
   }
 };
