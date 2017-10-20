@@ -30,6 +30,24 @@
 - [Nodejs@7.6.0+](https://nodejs.org/)
 - [Postgres@9.4+](https://www.postgresql.org/)
 
-## License
+## 参与贡献
+
+```bash
+git clone https://github.com/i18nErrorCode/node-i18nerr.git
+cd ./node-i18nerr
+yarn
+yarn run start
+```
+
+You can flow [Contribute Guide](https://github.com/i18nErrorCode/node-i18nerr/blob/master/contributing.md)
+
+## 贡献者
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+| [<img src="https://avatars1.githubusercontent.com/u/9758711?v=3" width="100px;"/><br /><sub>Axetroy</sub>](http://axetroy.github.io)<br />[💻](https://github.com/axetroy/wxapp-http/commits?author=axetroy "Code") [🔌](#plugin-axetroy "Plugin/utility libraries") [⚠️](https://github.com/axetroy/wxapp-http/commits?author=axetroy "Tests") [🐛](https://github.com/axetroy/wxapp-http/issues?q=author%3Aaxetroy "Bug reports") [🎨](#design-axetroy "Design") |
+| :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+## 开源许可
 
 The [Apache License](https://github.com/i18nErrorCode/node-i18nerr/blob/master/LICENSE)
