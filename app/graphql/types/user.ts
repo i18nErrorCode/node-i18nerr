@@ -19,10 +19,13 @@ export const user = {
     name: 'UserInfoType',
     fields: {
       uid: {
-        type: GraphQLString
+        type: new GraphQLNonNull(GraphQLString)
       },
       username: {
-        type: GraphQLString
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      nickname: {
+        type: new GraphQLNonNull(GraphQLString)
       }
     }
   }),
