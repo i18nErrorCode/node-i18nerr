@@ -117,12 +117,3 @@ export const user = {
     changeMember: changeMemberEntity
   }
 };
-
-export const admin = {
-  Public: {},
-  Me: {
-    createTable: createTableEntity,
-    updateTable: updateTableEntity,
-    changeMember: changeMemberEntity
-  }
-};

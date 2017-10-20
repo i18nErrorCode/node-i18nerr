@@ -101,11 +101,3 @@ export const user = {
     updateRow: updateRowEntity
   }
 };
-
-export const admin = {
-  Public: {},
-  Me: {
-    createRow: createRowEntity,
-    updateRow: updateRowEntity
-  }
-};

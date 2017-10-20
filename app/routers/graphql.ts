@@ -2,7 +2,7 @@ import * as graphqlHTTP from 'express-graphql';
 import * as express from 'express';
 
 import CONFIG from '../config';
-import { UserSchema, AdminSchema } from '../graphql';
+import { UserSchema } from '../graphql';
 
 const isProduction: boolean = CONFIG.isProduction;
 
@@ -83,19 +83,5 @@ export default () => {
     })
   );
 
-  router.use(
-    '/admin.graphql',
-    graphqlHTTP((req: any) => {
-      const startTime = Date.now();
-      return {
-        schema: AdminSchema,
-        graphiql: !isProduction,
-        formatError: errorFormattor,
-        extensions(argv: any) {
-          return extensions(argv, { startTime });
-        }
-      };
-    })
-  );
   return router;
 };

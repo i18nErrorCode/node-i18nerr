@@ -60,15 +60,3 @@ export const user = {
     updateProfile: updateEntity
   }
 };
-
-export const admin = {
-  Public: {
-    registry: registryEntity,
-    login: loginEntity
-  },
-  Me: {
-    registry: registryEntity,
-    login: loginEntity,
-    updateProfile: updateEntity
-  }
-};

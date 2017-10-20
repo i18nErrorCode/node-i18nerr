@@ -58,15 +58,3 @@ export const user = {
     haveMember: hasMemberEntity
   }
 };
-
-export const admin = {
-  Public: {
-    table: getTableInfo,
-    tables: getTables
-  },
-  Me: {
-    table: getTableInfo,
-    tables: getTables,
-    haveMember: hasMemberEntity
-  }
-};

@@ -4,7 +4,6 @@
 import { GraphQLNonNull, GraphQLString } from 'graphql';
 import { getRow, getRowList } from '../../controllers/row';
 import { RowType, RowListType } from '../types/row';
-import { FormQuery } from '../types/formQuery';
 
 const getRowInfo = {
   type: RowType,
@@ -40,17 +39,6 @@ const getRows = {
 };
 
 export const user = {
-  Public: {
-    row: getRowInfo,
-    rows: getRows
-  },
-  Me: {
-    row: getRowInfo,
-    rows: getRows
-  }
-};
-
-export const admin = {
   Public: {
     row: getRowInfo,
     rows: getRows

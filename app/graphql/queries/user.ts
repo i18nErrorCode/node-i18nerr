@@ -22,12 +22,3 @@ export const user = {
     user: getUserInfoEntity
   }
 };
-
-export const admin = {
-  Public: {
-    user: getUserInfoEntity
-  },
-  Me: {
-    user: getUserInfoEntity
-  }
-};

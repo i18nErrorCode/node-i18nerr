@@ -3,6 +3,5 @@
  */
 
 import UserSchema from './user';
-import AdminSchema from './admin';
 
-export { UserSchema, AdminSchema };
+export { UserSchema };
