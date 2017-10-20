@@ -80,17 +80,10 @@ export default () => {
     const ext = req.params.ext;
     try {
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      const newFile: string = path.join(process.cwd(), '.temp', `${tid}.${ext}`);
-
-      await fs.ensureFile(newFile);
-
       const raw: string = await getRawFile(tid, ext);
 
-      await fs.writeFile(newFile, raw);
-
       res.render('code', {
-        code: raw,
-        file: newFile
+        code: raw
       });
     } catch (err) {
       res.send(err.message);
@@ -111,13 +104,7 @@ export default () => {
 
       await fs.writeFile(newFile, raw);
 
-      fs
-        .createReadStream(newFile)
-        .pipe(res)
-        .on('end', () => {
-          console.info(`end stream...`);
-          fs.remove(newFile);
-        });
+      fs.createReadStream(newFile).pipe(res);
     } catch (err) {
       res.send(err.message);
     }
