@@ -160,7 +160,7 @@ export async function getRowList(query: FormQuery$) {
   try {
     const result: any = {};
     const queryResult: any = await RowModel.findAndCountAll({
-      limit,
+      // limit,
       offset: limit * page,
       order: sortMap(sort),
       where: {

@@ -29,18 +29,21 @@ const getRows = {
   type: RowListType,
   description: '获取表列表',
   args: {
-    query: {
-      name: 'query',
-      type: new GraphQLNonNull(FormQuery)
+    id: {
+      type: new GraphQLNonNull(GraphQLString)
     }
   },
   async resolve(root: any, params: any, req: any) {
-    return await getRowList(params.query);
+    const id = params.id;
+    return await getRowList({ limit: 100, keyJson: JSON.stringify({ tid: id }) });
   }
 };
 
 export const user = {
-  Public: {},
+  Public: {
+    row: getRowInfo,
+    rows: getRows
+  },
   Me: {
     row: getRowInfo,
     rows: getRows
@@ -48,7 +51,10 @@ export const user = {
 };
 
 export const admin = {
-  Public: {},
+  Public: {
+    row: getRowInfo,
+    rows: getRows
+  },
   Me: {
     row: getRowInfo,
     rows: getRows
