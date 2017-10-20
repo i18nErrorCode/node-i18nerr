@@ -21,6 +21,8 @@ async function getRawFile(tableId: string, ext: string) {
     transformer = require(`./transformer/default`);
   }
 
+  transformer = transformer['default'] ? transformer['default'] : transformer;
+
   return transformer(data);
 }
 
