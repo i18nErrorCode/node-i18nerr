@@ -34,11 +34,11 @@ const getTables = {
 };
 
 const hasMemberEntity = {
-  type: TableListType,
+  type: GraphQLBoolean,
   description: '验证用户是否在一个表的成员组中',
   args: {
     tid: {
-      type: new GraphQLNonNull(GraphQLBoolean)
+      type: new GraphQLNonNull(GraphQLString)
     }
   },
   async resolve(root: any, params: any, req: any) {
