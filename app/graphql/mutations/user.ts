@@ -49,7 +49,7 @@ const updateEntity = {
   }
 };
 
-export const user = {
+export default {
   Public: {
     registry: registryEntity,
     login: loginEntity

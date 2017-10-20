@@ -2,7 +2,7 @@ import * as graphqlHTTP from 'express-graphql';
 import * as express from 'express';
 
 import CONFIG from '../config';
-import { UserSchema } from '../graphql';
+import GraphQLSchema from '../graphql';
 
 const isProduction: boolean = CONFIG.isProduction;
 
@@ -73,7 +73,7 @@ export default () => {
     graphqlHTTP((req: any) => {
       const startTime = Date.now();
       return {
-        schema: UserSchema,
+        schema: GraphQLSchema,
         graphiql: !isProduction,
         formatError: errorFormattor,
         extensions(argv: any) {

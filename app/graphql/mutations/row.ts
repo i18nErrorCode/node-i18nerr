@@ -94,7 +94,7 @@ const updateRowEntity = {
   }
 };
 
-export const user = {
+export default {
   Public: {},
   Me: {
     createRow: createRowEntity,

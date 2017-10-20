@@ -47,7 +47,7 @@ const hasMemberEntity = {
   }
 };
 
-export const user = {
+export default {
   Public: {
     table: getTableInfo,
     tables: getTables

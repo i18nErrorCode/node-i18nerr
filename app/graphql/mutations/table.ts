@@ -109,7 +109,7 @@ const changeMemberEntity = {
   }
 };
 
-export const user = {
+export default {
   Public: {},
   Me: {
     createTable: createTableEntity,

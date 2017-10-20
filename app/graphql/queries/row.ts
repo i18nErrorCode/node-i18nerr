@@ -38,7 +38,7 @@ const getRows = {
   }
 };
 
-export const user = {
+export default  {
   Public: {
     row: getRowInfo,
     rows: getRows

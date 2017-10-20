@@ -14,7 +14,7 @@ const getUserInfoEntity = {
   }
 };
 
-export const user = {
+export default {
   Public: {
     user: getUserInfoEntity
   },
