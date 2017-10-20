@@ -1,6 +1,7 @@
 /**
  * Created by axetroy on 17-7-19.
  */
+import * as _ from 'lodash';
 import UserModel from '../postgres/models/user.model';
 import sequelize from '../postgres/index';
 import { md5, RFC3339NanoMaper, initQuery, sortMap } from '../utils';
@@ -20,7 +21,8 @@ export interface LoginArgv$ {
 }
 
 export interface UpdateUserArgv$ {
-  username: string;
+  uid: string;
+  nickname?: string;
 }
 
 export async function initUser() {
@@ -204,4 +206,31 @@ export async function getUserList(query: FormQuery$) {
   }
 }
 
-export async function updateUserInfo(argv: UpdateUserArgv$) {}
+export async function updateUserInfo(argv: UpdateUserArgv$) {
+  const { uid, nickname } = argv;
+  const t: any = await sequelize.transaction();
+  try {
+    const row: any = await UserModel.findOne({
+      where: { uid },
+      transaction: t,
+      lock: {
+        level: t.LOCK.UPDATE
+      }
+    });
+
+    if (!row) {
+      throw new Error(`User ${name} not exist!`);
+    }
+
+    if (_.isString(nickname)) {
+      await row.update({ nickname }, { transaction: t, lock: t.LOCK.UPDATE });
+    }
+
+    const data = row.dataValues;
+    await t.commit();
+    return data;
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
+}

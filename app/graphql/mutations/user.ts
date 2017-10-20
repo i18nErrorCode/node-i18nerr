@@ -3,8 +3,8 @@
  */
 
 import { GraphQLInputObjectType, GraphQLNonNull, GraphQLString, GraphQLBoolean } from 'graphql';
-import { login, createUser } from '../../controllers/user';
-import { UserType, RegisterArgv, LoginArgv, LoginType } from '../types/user';
+import { login, createUser, updateUserInfo } from '../../controllers/user';
+import { UserType, RegisterArgv, LoginArgv, LoginType, UpdateUserArgv } from '../types/user';
 
 const loginEntity = {
   type: LoginType,
@@ -34,6 +34,21 @@ const registryEntity = {
   }
 };
 
+const updateEntity = {
+  type: UserType,
+  description: '更新用户资料',
+  args: {
+    argv: {
+      type: UpdateUserArgv
+    }
+  },
+  async resolve(root: any, { argv }: any, req: any) {
+    const token = req.token;
+    const { nickname } = argv;
+    return await updateUserInfo({ uid: token.uid, nickname });
+  }
+};
+
 export const user = {
   Public: {
     registry: registryEntity,
@@ -41,7 +56,8 @@ export const user = {
   },
   Me: {
     registry: registryEntity,
-    login: loginEntity
+    login: loginEntity,
+    updateProfile: updateEntity
   }
 };
 
@@ -52,6 +68,7 @@ export const admin = {
   },
   Me: {
     registry: registryEntity,
-    login: loginEntity
+    login: loginEntity,
+    updateProfile: updateEntity
   }
 };

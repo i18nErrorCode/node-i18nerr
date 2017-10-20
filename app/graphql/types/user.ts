@@ -107,3 +107,12 @@ export const LoginArgv = new GraphQLInputObjectType({
     }
   }
 });
+
+export const UpdateUserArgv = new GraphQLInputObjectType({
+  name: 'UpdateUserArgv',
+  fields: {
+    nickname: {
+      type: GraphQLString
+    }
+  }
+});
