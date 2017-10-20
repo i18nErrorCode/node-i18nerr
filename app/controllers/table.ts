@@ -90,6 +90,18 @@ export async function createTable(argv: CreateTableArgv$) {
 }
 
 /**
+ * 检查一个用户是否是一个table的维护者
+ * @param {string} tableId
+ * @param {string} uid
+ * @returns {Promise<any>}
+ */
+export async function hasMember(tableId: string, uid: string) {
+  const table = await getTable(tableId);
+  const member: string[] = table.member || [];
+  return member.includes(uid);
+}
+
+/**
  * 给table添加新成员, 通过用户名的方式
  * @param {string} uid
  * @param {string} id

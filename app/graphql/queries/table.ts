@@ -2,7 +2,7 @@
  * Created by axetroy on 17-7-13.
  */
 import { GraphQLNonNull, GraphQLString } from 'graphql';
-import { getTable, getTableList } from '../../controllers/table';
+import { hasMember, getTable, getTableList } from '../../controllers/table';
 import { TableType, TableListType } from '../types/table';
 import { FormQuery } from '../types/formQuery';
 
@@ -33,6 +33,20 @@ const getTables = {
   }
 };
 
+const hasMemberEntity = {
+  type: TableListType,
+  description: '获取表列表',
+  args: {
+    id: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  },
+  async resolve(root: any, params: any, req: any) {
+    const token = req.token;
+    return await hasMember(params.id, token.uid);
+  }
+};
+
 export const user = {
   Public: {
     table: getTableInfo,
@@ -40,7 +54,8 @@ export const user = {
   },
   Me: {
     table: getTableInfo,
-    tables: getTables
+    tables: getTables,
+    haveMember: hasMemberEntity
   }
 };
 
@@ -51,6 +66,7 @@ export const admin = {
   },
   Me: {
     table: getTableInfo,
-    tables: getTables
+    tables: getTables,
+    haveMember: hasMemberEntity
   }
 };
