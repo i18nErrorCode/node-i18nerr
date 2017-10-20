@@ -96,9 +96,29 @@ export async function createTable(argv: CreateTableArgv$) {
  * @returns {Promise<any>}
  */
 export async function hasMember(tableId: string, uid: string): Promise<boolean> {
-  const table = await getTable(tableId);
-  const member: string[] = table.member || [];
-  return member.includes(uid);
+  const t = await sequelize.transaction();
+  try {
+    const row = await TableModel.findOne({
+      where: {
+        id: tableId
+      },
+      transaction: t,
+      lock: t.LOCK.UPDATE
+    });
+
+    if (!row) {
+      throw new Error(`Can not found table ${tableId}`);
+    }
+
+    const member: string[] = row.member || [];
+
+    await t.commit();
+
+    return member.includes(uid);
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
 }
 
 /**
