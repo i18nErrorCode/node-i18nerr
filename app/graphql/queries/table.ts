@@ -1,7 +1,7 @@
 /**
  * Created by axetroy on 17-7-13.
  */
-import { GraphQLNonNull, GraphQLString } from 'graphql';
+import { GraphQLBoolean, GraphQLNonNull, GraphQLString } from 'graphql';
 import { hasMember, getTable, getTableList } from '../../controllers/table';
 import { TableType, TableListType } from '../types/table';
 import { FormQuery } from '../types/formQuery';
@@ -35,15 +35,15 @@ const getTables = {
 
 const hasMemberEntity = {
   type: TableListType,
-  description: '获取表列表',
+  description: '验证用户是否在一个表的成员组中',
   args: {
-    id: {
-      type: new GraphQLNonNull(GraphQLString)
+    tid: {
+      type: new GraphQLNonNull(GraphQLBoolean)
     }
   },
   async resolve(root: any, params: any, req: any) {
     const token = req.token;
-    return await hasMember(params.id, token.uid);
+    return await hasMember(params.tid, token.uid);
   }
 };
 

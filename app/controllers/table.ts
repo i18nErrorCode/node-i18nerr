@@ -95,7 +95,7 @@ export async function createTable(argv: CreateTableArgv$) {
  * @param {string} uid
  * @returns {Promise<any>}
  */
-export async function hasMember(tableId: string, uid: string) {
+export async function hasMember(tableId: string, uid: string): Promise<boolean> {
   const table = await getTable(tableId);
   const member: string[] = table.member || [];
   return member.includes(uid);
