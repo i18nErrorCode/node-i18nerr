@@ -8,10 +8,15 @@ export default function(dataList: any[]) {
   const raw = `
 package i18nErr
 
+import (
+	"fmt"
+)
+
 type Error struct {
-	Code   int32  \`json:"code"\`
-	Detail string \`json:"detail"\`
-	Prefix string \`json:"prefix"\`
+	Code   int32
+	Detail string
+	Prefix string
+	vars   []interface{}
 }
 
 func (e *Error) GetCode() int32 {
@@ -22,8 +27,24 @@ func (e *Error) GetDetail() string {
 	return e.Detail
 }
 
+func (e *Error) SetDetail(c string) *Error {
+	e.Detail = c
+	return e
+}
+
 func (e *Error) GetPrefix() string {
 	return e.Prefix
+}
+
+func (e *Error) GetVars() []interface{} {
+	return e.vars
+}
+
+func (e *Error) SetVars(con ...interface{}) *Error {
+	e2 := &Error{}
+	*e2 = *e
+	e2.vars = con
+	return e2
 }
 
 func (e *Error) Error() string {
@@ -35,7 +56,7 @@ var (
     .map(d => {
       const key = firstUpperCase(d.key);
       return `
-     ${key} = Error{Code: 1, Detail: \`${d.value_en}\`, Prefix: "base"}   // ${d.value_cn}
+     ${key} = &Error{Code: 1, Detail: \`${d.value_en}\`, Prefix: "base"}   // ${d.value_cn}
      `;
     })
     .join('')}
