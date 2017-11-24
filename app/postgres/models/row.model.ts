@@ -4,7 +4,7 @@
 import * as Sequelize from 'sequelize';
 import sequelize from '../index';
 
-const UNIT_KEY = 'uid_tid_name';
+const UNIT_KEY = 'tablekey_rowkey';
 
 const RowModel = sequelize.define('row', {
   id: {
@@ -18,13 +18,16 @@ const RowModel = sequelize.define('row', {
     type: Sequelize.UUID,
     required: true,
     unique: UNIT_KEY, // 联合唯一
-    allowNull: false,
-    comment: 'table表的id'
+    allowNull: false
   },
   uid: {
     type: Sequelize.UUID,
     required: true,
-    unique: UNIT_KEY, // 联合唯一
+    allowNull: false
+  },
+  code: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
     allowNull: false
   },
   key: {
@@ -52,15 +55,13 @@ const RowModel = sequelize.define('row', {
     type: Sequelize.STRING,
     required: false,
     allowNull: true,
-    defaultValue: '',
-    comment: '备注'
+    defaultValue: ''
   },
   isActive: {
     type: Sequelize.BOOLEAN,
     required: false,
     allowNull: true,
-    defaultValue: true,
-    comment: '是否激活'
+    defaultValue: true
   }
 });
 

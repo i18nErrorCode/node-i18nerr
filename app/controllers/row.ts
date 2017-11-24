@@ -33,6 +33,11 @@ export interface UpdateRowArgv$ {
  */
 export async function createRow(argv: CreateRowArgv$) {
   const { tid, uid, key, value_cn, value_en, value_tw } = argv;
+
+  if (/^[a-z]+$/i.test(key) !== true) {
+    throw new Error(`Invalid Key, Key must be [a-z, A-Z]`);
+  }
+
   const t: any = await sequelize.transaction();
   try {
     const oldRow = await RowModel.findOne({
@@ -75,6 +80,11 @@ export async function createRow(argv: CreateRowArgv$) {
  */
 export async function updateRow(argv: UpdateRowArgv$) {
   const { id, uid, key, value_cn, value_en, value_tw, isActive } = argv;
+
+  if (key && /^[a-z]+$/i.test(key) !== true) {
+    throw new Error(`Invalid Key, Key must be [a-z, A-Z]`);
+  }
+
   const t: any = await sequelize.transaction();
   try {
     const row = await RowModel.findOne({

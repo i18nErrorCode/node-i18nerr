@@ -52,6 +52,11 @@ async function resolveMember(members: string[] = []) {
  */
 export async function createTable(argv: CreateTableArgv$) {
   const { uid, name, description } = argv;
+
+  if (/^[a-z]+$/i.test(name) !== true) {
+    throw new Error(`Invalid Key, Key must be [a-z, A-Z]`);
+  }
+
   const t: any = await sequelize.transaction();
   try {
     const oldRow = await TableModel.findOne({
@@ -240,6 +245,11 @@ export async function removeMember(uid: string, id: string, oldMemberId: string)
  */
 export async function updateTable(argv: UpdateTableArgv$) {
   const { id, uid, name, description, isActive } = argv;
+
+  if (name && /^[a-z]+$/i.test(name) !== true) {
+    throw new Error(`Invalid Key, Key must be [a-z, A-Z]`);
+  }
+
   const t: any = await sequelize.transaction();
 
   try {
