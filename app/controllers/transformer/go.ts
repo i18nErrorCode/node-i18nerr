@@ -4,7 +4,7 @@ function firstUpperCase(str) {
   });
 }
 
-export default function(dataList: any[]) {
+export default function(dataList: any[], tableName) {
   const raw = `
 package i18nErr
 
@@ -56,7 +56,9 @@ var (
     .map(d => {
       const key = firstUpperCase(d.key);
       return `
-     ${key} = &Error{Code: 1, Detail: \`${d.value_en}\`, Prefix: "base"}   // ${d.value_cn}
+     ${key} = &Error{Code: ${d.code}, Detail: \`${d.value_en}\`, Prefix: "${tableName}"}   // ${
+        d.value_cn
+      }
      `;
     })
     .join('')}
