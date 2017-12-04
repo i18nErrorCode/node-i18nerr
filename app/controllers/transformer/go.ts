@@ -49,7 +49,7 @@ func (e *Error) SetVars(con ...interface{}) *Error {
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("%s%d %s", e.Prefix, e.Code, e.Detail)
+	return fmt.Sprintf("%s%d|%s", e.Prefix, e.Code, e.Detail)
 }
 
 var (
