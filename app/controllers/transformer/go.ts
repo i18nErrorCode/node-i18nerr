@@ -1,7 +1,8 @@
-function firstUpperCase(str) {
-  return str.replace(/\b(\w)(\w*)/g, function($0, $1, $2) {
-    return $1.toUpperCase() + $2.toLowerCase();
-  });
+function makeSureFirstUpperCase(str) {
+  const arr = str.split('');
+  const s = arr[0];
+  arr[0] = s.toUpperCase();
+  return arr.join('');
 }
 
 export default function(dataList: any[], tableName) {
@@ -54,7 +55,7 @@ func (e *Error) Error() string {
 var (
   ${dataList
     .map(d => {
-      const key = firstUpperCase(d.key);
+      const key = makeSureFirstUpperCase(d.key);
       return `
      ${key} = &Error{Code: ${d.code}, Detail: \`${d.value_en}\`, Prefix: "${tableName}"}   // ${
         d.value_cn
