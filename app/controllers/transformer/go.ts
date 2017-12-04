@@ -57,10 +57,9 @@ var (
     .map(d => {
       const key = makeSureFirstUpperCase(d.key);
       return `
-     ${key} = &Error{Code: ${d.code}, Detail: \`${d.value_en}\`, Prefix: "${tableName}"}   // ${
+     ${key} = &Error{Code: ${d.code}, Detail: "${d.value_en}", Prefix: "${tableName}"}   // ${
         d.value_cn
-      }
-     `;
+      }`;
     })
     .join('')}
 )
