@@ -6,11 +6,21 @@ function makeSureFirstUpperCase(str) {
 }
 
 export default function(dataList: any[], tableName) {
-  const raw = `
+  const raw = `/* generate by i18n error platform, please do not edit it */
 package i18nErr
+import "fmt"
 
-import (
-	"fmt"
+var (
+  ${dataList
+    .sort(v => -v.key)
+    .map(d => {
+      const key = makeSureFirstUpperCase(d.key);
+      return `
+     ${key} = &Error{Code: ${d.code}, Detail: "${d.value_en}", Prefix: "${tableName}"}   // ${
+        d.value_cn
+      }`;
+    })
+    .join('')}
 )
 
 type Error struct {
@@ -51,18 +61,6 @@ func (e *Error) SetVars(con ...interface{}) *Error {
 func (e *Error) Error() string {
 	return fmt.Sprintf("%s%d|%s", e.Prefix, e.Code, e.Detail)
 }
-
-var (
-  ${dataList
-    .map(d => {
-      const key = makeSureFirstUpperCase(d.key);
-      return `
-     ${key} = &Error{Code: ${d.code}, Detail: "${d.value_en}", Prefix: "${tableName}"}   // ${
-        d.value_cn
-      }`;
-    })
-    .join('')}
-)
   `;
 
   return raw;
