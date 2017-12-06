@@ -10,15 +10,14 @@ export default function(dataList: any[], tableName) {
 package i18nErr
 import "fmt"
 
-var (
-  ${dataList
+var (${dataList
     .sort(v => -v.key)
     .map(d => {
       const key = makeSureFirstUpperCase(d.key);
+      const c = d.code;
+      const detail = d.value_en;
       return `
-     ${key} = &Error{Code: ${d.code}, Detail: "${d.value_en}", Prefix: "${tableName}"}   // ${
-        d.value_cn
-      }`;
+    ${key} = &Error{Code: ${c}, Detail: "${detail}", Prefix: "${tableName}"}   // ${d.value_cn}`;
     })
     .join('')}
 )

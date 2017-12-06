@@ -33,10 +33,10 @@ export async function rawHandler(req, res) {
   const tid = req.params.tid;
   const ext = req.params.ext;
   try {
-    // res.setHeader('Content-Type', 'text/html; charset=utf-8');
     const raw: string = await getRawFile(tid, ext);
 
     if (!!req.query.format) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.render('code', {
         code: raw
       });

@@ -146,6 +146,10 @@ export async function addMemberByUserName(uid: string, id: string, newMemberUser
  * @returns {Promise<Array | any | {type; required; allowNull}>}
  */
 export async function addMember(uid: string, id: string, newMemberId: string) {
+  if (await hasMember(id, newMemberId)) {
+    throw new Error(`member exist!`);
+  }
+
   const t: any = await sequelize.transaction();
   try {
     const row = await TableModel.findOne({
