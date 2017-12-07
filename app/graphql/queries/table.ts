@@ -2,7 +2,7 @@
  * Created by axetroy on 17-7-13.
  */
 import { GraphQLBoolean, GraphQLNonNull, GraphQLString } from 'graphql';
-import { hasMember, getTable, getTableList } from '../../controllers/table';
+import { hasMember, getTable, getTableList, getTableByName } from '../../controllers/table';
 import { TableType, TableListType } from '../types/table';
 import { FormQuery } from '../types/formQuery';
 
@@ -16,6 +16,19 @@ const getTableInfo = {
   },
   async resolve(root: any, params: any, req: any) {
     return await getTable(params.id);
+  }
+};
+
+const getTableInfoByName = {
+  type: TableType,
+  description: '通过名字获取表信息',
+  args: {
+    name: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  },
+  async resolve(root: any, params: any, req: any) {
+    return await getTableByName(params.name);
   }
 };
 
@@ -50,6 +63,7 @@ const hasMemberEntity = {
 export default {
   Public: {
     table: getTableInfo,
+    tableByName: getTableInfoByName,
     tables: getTables
   },
   Me: {

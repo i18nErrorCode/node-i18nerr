@@ -46,7 +46,8 @@ module.exports = {
 ${dataList
     .sort(v => -v.key)
     .map(d => {
-      return `  ${d.key}: new I18nError(${d.code}, "${d.value_en}", "${tableName}"), // ${d.value_cn}`;
+      return `  ${d.key}: new I18nError(${d.code}, "${d.value_en}", "${d.tableName ||
+        tableName}"), // ${d.value_cn}`;
     })
     .join('\n')}
 };

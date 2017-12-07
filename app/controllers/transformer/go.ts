@@ -17,7 +17,9 @@ var (${dataList
       const c = d.code;
       const detail = d.value_en;
       return `
-    ${key} = &Error{Code: ${c}, Detail: "${detail}", Prefix: "${tableName}"}   // ${d.value_cn}`;
+    ${key} = &Error{Code: ${c}, Detail: "${detail}", Prefix: "${d.tableName || tableName}"}   // ${
+        d.value_cn
+      }`;
     })
     .join('')}
 )

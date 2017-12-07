@@ -55,9 +55,8 @@ class I18nError extends Error implements I18nError$ {
 ${dataList
     .sort(v => -v.key)
     .map(d => {
-      return `const ${d.key} = new I18nError(${d.code}, "${d.value_en}", "${tableName}"); // ${
-        d.value_cn
-      }`;
+      return `const ${d.key} = new I18nError(${d.code}, "${d.value_en}", "${d.tableName ||
+        tableName}"); // ${d.value_cn}`;
     })
     .join('\n')}
 

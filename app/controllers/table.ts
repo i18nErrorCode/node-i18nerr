@@ -331,6 +331,36 @@ export async function getTable(id: string) {
 }
 
 /**
+ * 通过表名获取表
+ * @param {string} name
+ * @returns {Promise<any>}
+ */
+export async function getTableByName(name: string) {
+  const t: any = await sequelize.transaction();
+
+  try {
+    const row = await TableModel.findOne({
+      where: {
+        name
+      },
+      transaction: t,
+      lock: t.LOCK.UPDATE
+    });
+
+    await t.commit();
+
+    const data = row.dataValues;
+
+    data.member = await resolveMember(data.member);
+
+    return data;
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
+}
+
+/**
  * 获取列表
  * @returns {Promise<any>}
  */

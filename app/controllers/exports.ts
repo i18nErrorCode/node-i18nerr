@@ -5,7 +5,7 @@ import { getTable } from './table';
 
 async function getRawFile(tableId: string, ext: string) {
   const result = await getRowList({
-    limit: 100,
+    limit: 10000,
     keyJson: JSON.stringify({ tid: tableId })
   });
 
@@ -27,6 +27,68 @@ async function getRawFile(tableId: string, ext: string) {
   transformer = transformer['default'] ? transformer['default'] : transformer;
 
   return transformer(data, table.name);
+}
+
+/**
+ * 合并多个文件
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+export async function rawMultipleFile(req, res) {
+  const jsonstr = req.params.jsonstr;
+  try {
+    const obj = JSON.parse(jsonstr);
+    if (Array.isArray(obj.ids) === false) {
+      throw new Error(`ids required`);
+    }
+
+    if (typeof obj.ext !== 'string') {
+      throw new Error(`ext required`);
+    }
+
+    const ids = obj.ids || [];
+
+    // default transform
+    let transformer = function(data: any, tableName: string) {
+      return `Can not transform ${obj.ext} file`;
+    };
+
+    try {
+      transformer = require(`./transformer/${obj.ext}`);
+    } catch (err) {
+      transformer = require(`./transformer/default`);
+    }
+
+    transformer = transformer['default'] ? transformer['default'] : transformer;
+
+    let data = [];
+
+    for (let i = 0; i < ids.length; i++) {
+      const tid = ids[i];
+      const table = await getTable(tid);
+      const result = await getRowList({
+        limit: 10000,
+        keyJson: JSON.stringify({ tid })
+      });
+
+      result.data.forEach((v, i) => {
+        result.data[i].tableName = table.name;
+      });
+
+      data = data.concat(result.data);
+    }
+
+    const raw = transformer(data, "");
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.render('code', {
+      code: raw
+    });
+  } catch (err) {
+    console.error(err);
+    res.send('done');
+  }
 }
 
 export async function rawHandler(req, res) {
