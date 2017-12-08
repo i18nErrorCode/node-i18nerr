@@ -35,6 +35,7 @@ export function generateToken(uid: string): string {
  * @returns {Promise<string>}
  */
 export function decryptToken(token: string): Promise<Token$> {
+  token = token.replace(/^Bearer\s+/, '');
   return new Promise((resolve, reject) => {
     jwt.verify(token, PRIVATE_KEY, function(err, decoded) {
       if (err) {
@@ -52,6 +53,7 @@ export function decryptToken(token: string): Promise<Token$> {
  * @returns {Promise<void>}
  */
 export async function verifyToken(token: string): Promise<Token$> {
+  token = token.replace(/^Bearer\s+/, '');
   try {
     const decoded = await decryptToken(token);
     if (getUnixTime() > decoded.expired) {
