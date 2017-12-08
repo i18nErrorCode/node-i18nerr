@@ -36,26 +36,17 @@ async function getRawFile(tableId: string, ext: string) {
  * @returns {Promise<void>}
  */
 export async function rawMultipleFile(req, res) {
-  const jsonstr = req.params.jsonstr;
   try {
-    const obj = JSON.parse(jsonstr);
-    if (Array.isArray(obj.ids) === false) {
-      throw new Error(`ids required`);
-    }
-
-    if (typeof obj.ext !== 'string') {
-      throw new Error(`ext required`);
-    }
-
-    const ids = obj.ids || [];
+    const ext = req.params.ext;
+    const ids = req.params.ids.split(',');
 
     // default transform
     let transformer = function(data: any, tableName: string) {
-      return `Can not transform ${obj.ext} file`;
+      return `Can not transform ${ext} file`;
     };
 
     try {
-      transformer = require(`./transformer/${obj.ext}`);
+      transformer = require(`./transformer/${ext}`);
     } catch (err) {
       transformer = require(`./transformer/default`);
     }
@@ -79,15 +70,18 @@ export async function rawMultipleFile(req, res) {
       data = data.concat(result.data);
     }
 
-    const raw = transformer(data, "");
+    const raw = transformer(data, '');
 
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.render('code', {
-      code: raw
-    });
+    if (req.query.format == true) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.render('code', {
+        code: raw
+      });
+    } else {
+      res.send(raw);
+    }
   } catch (err) {
-    console.error(err);
-    res.send('done');
+    res.send({ message: err.message });
   }
 }
 
