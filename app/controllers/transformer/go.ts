@@ -17,7 +17,7 @@ var (${dataList
       const c = d.code;
       const detail = d.value_en;
       return `
-    ${key} = &Error{Key: "${key}", Code: ${c}, Detail: "${detail}", Prefix: "${d.tableName || tableName}"}   // ${
+    ${key} = &Error{Code: ${c}, Detail: "${detail}", Prefix: "${d.tableName || tableName}"}   // ${
         d.value_cn
       }`;
     })
@@ -26,14 +26,9 @@ var (${dataList
 
 type Error struct {
 	Code   int32
-	Key    string
 	Detail string
 	Prefix string
 	vars   []interface{}
-}
-
-func (e *Error) GetKey() string {
-	return e.Key
 }
 
 func (e *Error) GetCode() int32 {
