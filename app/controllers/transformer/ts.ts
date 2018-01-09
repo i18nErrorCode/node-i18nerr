@@ -22,7 +22,7 @@ interface I18nError$ {
   Error(): string;
 }
 
-class I18nError extends Error implements I18nError$ {
+export default class I18nError extends Error implements I18nError$ {
   public vars: any;
   constructor(public Code: number, public Detail: string, public Prefix: string) {
     super(Detail);
@@ -33,14 +33,14 @@ class I18nError extends Error implements I18nError$ {
   GetDetail(): string {
     return this.Detail;
   }
-  SetDetail(detail: string): I18nError {
+  SetDetail(detail: string): this {
     this.Detail = detail;
     return this;
   }
   GetPrefix(): string {
     return this.Prefix;
   }
-  SetVars(vars: any): I18nError {
+  SetVars(vars: any): this {
     this.vars = vars;
     return this;
   }
@@ -55,15 +55,8 @@ class I18nError extends Error implements I18nError$ {
 ${dataList
     .sort(v => -v.key)
     .map(d => {
-      return `const ${d.key} = new I18nError(${d.code}, "${d.value_en}", "${d.tableName ||
+      return `export const ${d.key} = new I18nError(${d.code}, "${d.value_en}", "${d.tableName ||
         tableName}"); // ${d.value_cn}`;
-    })
-    .join('\n')}
-
-${dataList
-    .sort(v => -v.key)
-    .map(d => {
-      return `module.exports.${d.key} = ${d.key};`;
     })
     .join('\n')}
 `;
