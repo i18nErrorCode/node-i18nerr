@@ -69,11 +69,14 @@ ${dataList
     .sort(v => -v.key)
     .map(d => {
       if (!keys[d.key]) {
-        keys[d.key] = d;
+        keys[d.key] = keys[d.key] ? keys[d.key] + 1 : 1;
         return `export const ${d.key} = new I18nError(${d.code}, "${d.value_en}", "${d.tableName ||
           tableName}"); // ${d.value_cn}`;
       } else {
-        return `// duplicate with the key "${d.key}" in module "${keys[d.key].tableName}"`;
+        // 重复的key，按照顺序排列
+        return `export const ${d.key}_${keys[d.key]} = new I18nError(${d.code}, "${
+          d.value_en
+        }", "${d.tableName || tableName}"); // ${d.value_cn}`;
       }
     })
     .join('\n')}
