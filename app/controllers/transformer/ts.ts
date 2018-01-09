@@ -13,17 +13,21 @@ interface I18nError$ {
   Code: number;
   Detail: string;
   Prefix: string;
-  vars: any;
+  Vars: any;
+  Context: any;
   GetCode(): number;
   GetDetail(): string;
   SetDetail(detail: string): this;
   GetPrefix(): string;
   SetVars(vars: any): this;
+  SetContext(context: any): this;
+  GetContext(): any;
   Error(): string;
 }
 
 export default class I18nError extends Error implements I18nError$ {
-  public vars: any;
+  public Vars: any;
+  public Context: any;
   constructor(public Code: number, public Detail: string, public Prefix: string) {
     super(Detail);
   }
@@ -41,8 +45,15 @@ export default class I18nError extends Error implements I18nError$ {
     return this.Prefix;
   }
   SetVars(vars: any): this {
-    this.vars = vars;
+    this.Vars = vars;
     return this;
+  }
+  SetContext(context: any): this {
+    this.Context = context;
+    return this;
+  }
+  GetContext(): any {
+    return this.Context;
   }
   Error(): string {
     return this.toString();
