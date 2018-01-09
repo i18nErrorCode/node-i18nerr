@@ -8,6 +8,8 @@ export default function(dataList: any[], tableName) {
     };
   });
 
+  const keys = {};
+
   return `/* generate by i18n error platform, please do not edit it */
 interface I18nError$ {
   Code: number;
@@ -66,8 +68,13 @@ export default class I18nError extends Error implements I18nError$ {
 ${dataList
     .sort(v => -v.key)
     .map(d => {
-      return `export const ${d.key} = new I18nError(${d.code}, "${d.value_en}", "${d.tableName ||
-        tableName}"); // ${d.value_cn}`;
+      if (!keys[d.key]) {
+        keys[d.key] = d;
+        return `export const ${d.key} = new I18nError(${d.code}, "${d.value_en}", "${d.tableName ||
+          tableName}"); // ${d.value_cn}`;
+      } else {
+        return `// duplicate with the key "${d.key}" in module "${keys[d.key].tableName}"`;
+      }
     })
     .join('\n')}
 `;
