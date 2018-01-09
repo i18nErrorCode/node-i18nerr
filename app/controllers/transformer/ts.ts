@@ -12,11 +12,11 @@ export default function(dataList: any[], tableName) {
 
   return `/* generate by i18n error platform, please do not edit it */
 interface I18nError$ {
-  Code: number;
-  Detail: string;
-  Prefix: string;
-  Vars: any;
-  Context: any;
+  code: number;
+  detail: string;
+  prefix: string;
+  vars: any;
+  context: any;
   GetCode(): number;
   GetDetail(): string;
   SetDetail(detail: string): this;
@@ -28,40 +28,40 @@ interface I18nError$ {
 }
 
 export default class I18nError extends Error implements I18nError$ {
-  public Vars: any;
-  public Context: any;
-  constructor(public Code: number, public Detail: string, public Prefix: string) {
-    super(Detail);
+  public vars: any;
+  public context: any;
+  constructor(public code: number, public detail: string, public prefix: string) {
+    super(detail);
   }
   GetCode(): number {
-    return this.Code;
+    return this.code;
   }
   GetDetail(): string {
-    return this.Detail;
+    return this.detail;
   }
   SetDetail(detail: string): this {
-    this.Detail = detail;
+    this.detail = detail;
     return this;
   }
   GetPrefix(): string {
-    return this.Prefix;
+    return this.prefix;
   }
   SetVars(vars: any): this {
-    this.Vars = vars;
+    this.vars = vars;
     return this;
   }
   SetContext(context: any): this {
-    this.Context = context;
+    this.context = context;
     return this;
   }
   GetContext(): any {
-    return this.Context;
+    return this.context;
   }
   Error(): string {
     return this.toString();
   }
   toString(): string {
-    return this.Prefix + this.Code + '|' + this.Detail;
+    return this.prefix + this.code + '|' + this.detail;
   }
 }
 
@@ -77,5 +77,25 @@ ${dataList
       }
     })
     .join('\n')}
+    
+/**
+ * i18nCatch
+ * @param {Promise<any>} p
+ * @returns {Promise<I18nError>}
+ */
+export function i18nCatch(p: Promise<any>): Promise<I18nError> {
+  return p.catch(err => {
+    return Promise.reject(fromError(err));
+  });
+}
+
+/**
+ * cover error to I18nError
+ * @param err
+ * @returns {I18nError}
+ */
+export function fromError(err): I18nError {
+  return new I18nError(err.code || 0, err.detail || err.message, err.prefix || '');
+}
 `;
 }
