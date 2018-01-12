@@ -86,11 +86,21 @@ ${dataList
  * @param {Promise<any>} p
  * @returns {Promise<I18nError>}
  */
-export function i18nCatch(p: Promise<any>): Promise<I18nError> {
+export function i18nCatch(p: Promise<any>): Promise<I18nError | any> {
   return p.catch(err => {
     return Promise.reject(fromError(err));
   });
 }
+
+/**
+ * cover promise err to I18n err
+ * @param promise
+ * @param {{}} context
+ */
+export function i18nErrify(promise, context) {
+  return i18nCatch(promise).catch(err => Promise.reject(err.SetContext(context)));
+}
+
 
 /**
  * cover error to I18nError
@@ -98,6 +108,9 @@ export function i18nCatch(p: Promise<any>): Promise<I18nError> {
  * @returns {I18nError}
  */
 export function fromError(err): I18nError {
+  if (err instanceof Error == false) {
+    err = new Error(err + '');
+  }
   return new I18nError(err.code || 0, err.detail || err.message, err.prefix || '');
 }
 `;
