@@ -28,8 +28,8 @@ interface I18nError$ {
 }
 
 export default class I18nError extends Error implements I18nError$ {
-  public vars: any;
-  public context: any;
+  public vars: any = {};
+  public context: any = {};
   constructor(public code: number, public detail: string, public prefix: string) {
     super(detail);
   }
