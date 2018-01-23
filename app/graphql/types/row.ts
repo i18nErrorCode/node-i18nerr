@@ -1,22 +1,13 @@
 /**
  * Created by axetroy on 17-7-13.
  */
-import {
-  GraphQLObjectType,
-  GraphQLNonNull,
-  GraphQLString,
-  GraphQLID,
-  GraphQLBoolean,
-  GraphQLList,
-  GraphQLInt,
-  GraphQLInputObjectType
-} from 'graphql';
+import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLInt } from "graphql";
 
-import { generateListType } from './generate-list';
-import { user } from './user';
+import { generateListType } from "./generate-list";
+import { user } from "./user";
 
 export const RowType = new GraphQLObjectType({
-  name: 'RowType',
+  name: "RowType",
   fields: {
     id: {
       type: new GraphQLNonNull(GraphQLString)
@@ -27,7 +18,10 @@ export const RowType = new GraphQLObjectType({
     owner: user,
     tid: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'table id'
+      description: "table id"
+    },
+    code: {
+      type: new GraphQLNonNull(GraphQLInt)
     },
     key: {
       type: new GraphQLNonNull(GraphQLString)
