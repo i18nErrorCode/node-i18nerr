@@ -1,0 +1,21 @@
+version: '3'
+services:
+  pg_i18n:
+    image: postgres:9.6.6-alpine
+    restart: always
+    volumes:
+      - "./docker/volumes/pg:/var/lib/postgresql/data"
+    ports:
+      - 6432:5432
+  node:
+    image: keymetrics/pm2:8-alpine
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - 6099:1080
+    links:
+      - pg_i18n
