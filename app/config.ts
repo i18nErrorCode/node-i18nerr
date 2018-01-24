@@ -9,7 +9,7 @@ const PROJECT_ROOT_PATH: string = path.join(__dirname, '../');
 
 const PROJECT_CONFIG_PATH: string =
   process.env.NODE_ENV === 'production'
-    ? path.join(PROJECT_ROOT_PATH, 'config.prod.yaml')
+    ? path.join(PROJECT_ROOT_PATH, 'config.yaml')
     : path.join(PROJECT_ROOT_PATH, 'config.dev.yaml');
 
 interface Db$ {
