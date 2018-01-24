@@ -46,7 +46,9 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: CONFIG.isProduction ? ['*'] : '*',
+    origin: function(ctx) {
+      return ctx.headers.origin;
+    },
     allowedHeaders: ['Content-Type', 'Content-Length', 'Authorization'],
     credentials: true,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
