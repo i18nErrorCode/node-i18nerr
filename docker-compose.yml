@@ -16,6 +16,6 @@ services:
     volumes:
       - ./:/home/node/app
     ports:
-      - 6099:1080
+      - 6099:6099
     links:
       - pg_i18n
