@@ -57,7 +57,7 @@
     "@types/uuid": "^3.4.2",
     "@types/validator": "^6.2.3",
     "@types/winston": "^2.3.5",
-    "ava": "^0.24.0",
+    "ava": "^0.25.0",
     "cross-env": "^5.0.5",
     "glob": "^7.1.2",
     "rimraf": "^2.6.1",
