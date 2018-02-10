@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/i18nErrorCode/node-i18nerr.git#readme",
   "dependencies": {
-    "@types/node": "^8.0.28",
+    "@types/node": "^9.4.5",
     "body-parser": "^1.17.2",
     "connect-timeout": "^1.9.0",
     "cookie-parser": "^1.4.3",
