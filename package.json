@@ -61,7 +61,7 @@
     "cross-env": "^5.0.5",
     "glob": "^7.1.2",
     "rimraf": "^2.6.1",
-    "ts-node": "^3.3.0",
+    "ts-node": "^5.0.0",
     "typescript": "^2.5.2"
   }
 }
