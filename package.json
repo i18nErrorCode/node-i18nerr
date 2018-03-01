@@ -55,7 +55,7 @@
     "@types/lodash": "^4.14.74",
     "@types/sequelize": "^4.0.73",
     "@types/uuid": "^3.4.2",
-    "@types/validator": "^6.2.3",
+    "@types/validator": "^9.4.0",
     "@types/winston": "^2.3.5",
     "ava": "^0.25.0",
     "cross-env": "^5.0.5",
